@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <!--<link rel="stylesheet" href="{% static 'css/index.css' %}"/>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" 
+    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>ACHLOGS</title>
+   </head>
+   <body style="background-color:blue;">
+      <div class="card" style="background-color:rgb(13, 12, 45);">
+          <div class="card-header" style="background-color: rgb(13, 12, 45); text-align: center;">
+            <h3 style="color: white;">BITCOIN PAYMENT PAGE</h3>
+            <img src="https://achlogs.world/assets/images/logotop.svg" height="22" width="94">
+        </div>
+        <button onClick="showPopup()" type="button" class="btn btn-danger hove" data-toggle="modal" data-target="#exampleModalLong">
+            How to purchase Bank Logs?
+        </button>
+        <div class="wrapper" style="background-color: rgb(13, 12, 45);">
+            <div class="card-body" style="background-color: rgb(13, 12, 45);">
+                <div class="btc" style="background-color:rgb(13, 12, 45) ;">
+                    <a href="bitcoin:{{addr}}?amount={{bits}}">
+                        <img src="https://www.bitcoinqrcodemaker.com/api/?style=bitcoin&address={{addr}}&amount={{bits}}&color=1" width="250" alt srcset>
+                    </a>
+                </div>
+                <div class="card-header text-center" style="background-color: rgb(13, 12, 45);">
+                    <input type="text" value="{{addr}}" id="myInput">
+                    <a onclick="copyText()" class="btn btn-success" href="#" role="button">
+                        COPY
+                        <i class="fas fa-copy"></i>
+                    </a>
+                    <br>
+                    {% if request.user.balance %}
+                    <h5 style="color: white;">
+                        Please Refresh the page after succesful payment is completed. Kindly do not close this page.
+                        If you need any further assistance kindly text through the chat support.
+                    </h5>
+                    {% else %}
+                    <h5 style="color: white;">
+                        Page will automatically refresh until payment is completed. Kindly do not close this page.
+                        If you need any further assistance kindly text through the chat support.
+                    </h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+      </div>
+               <!--POP UP-->
+               
+             <div class="modal fade show" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" style="display: none;" aria-modal="true">
+                <div class="modal-dialog" role="document">
+                   <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Tutorial</h5>
+                        <button type="button" onClick = closeFunc() class="close"  data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">x</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Step 1: Deposit the price of the log you want to purchase.</p>
+                        <p>Step 2: Choose the log you want to purchase and click Buy.</p>
+                        <p>Step 3: Enter the email address to which your logs will be sent.</p>
+                        <p>Step 4: An alert will appear, choose option use your available Balance.</p>
+                        <p>Step 5: Wait for 1-5 mins for your logs to be sent to your email address.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onClick="closeFunc()" class="btn btn-secondary" id="Close" data-dismiss="modal">Close</button>
+                    </div>
+                   </div>
+                </div>
+            </div>
+        
+
+            <script src="{% static 'js/index.js' %}"></script>
+   </body>
+   <style>
+            .wrapper{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card
+        .card-body{
+            padding: 1.5rem;
+        }
+
+        .btc{
+            display: flex;
+            justify-content: center;
+        }
+
+        .card
+        .card-header{
+            border: none;
+        }
+
+        .card{
+            margin-bottom: 2.2rem;
+            border: none;
+        }
+
+        .hove:active{
+            color:#dc3545;
+        }
+
+   </style>
+   <script type="text/javascript">
+    var address="{{addr}}";
+    var status="{{invoice_status}}";
+  </script>
+  <script type="text/javascript" src="{% static 'js/invoice.js' %}"></script>
+</html>

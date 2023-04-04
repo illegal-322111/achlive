@@ -1,0 +1,293 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    font-weight: 400;
+    background-color: black;
+  }
+    .main {
+    width: 70%;
+    height: 100%;
+    background-color: black;
+    
+  }
+
+  .sidebar{
+    width: 300px;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color:rgb(1,28,42);
+    overflow-y: scroll;
+  }
+
+  .balance{
+    top: 130px;
+    left: 42px;
+    color: #d9d9d9;
+    width: 322px;
+    height: 50px;
+    
+  }
+
+  .add-balance{
+    top: 0;
+    left: 10px;
+    width: 240px;
+    height: 46px;
+    background-color:transparent;
+    border: none;
+    outline-color: none;
+    cursor: pointer;
+    color: aliceblue;
+    margin-left:-20px;
+    margin-top: -80px;
+    text-align: left;
+    justify-content: space-between;
+    display: flex;
+  }
+
+  .add-balance:hover
+  {
+    background-color: aliceblue;
+    border-radius: 7px;
+    color: #000;
+  }
+
+  
+  .balance,
+  .add-balance{
+    position: absolute;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  .card1{
+    position: absolute;
+    top: 248px;
+    left: 46px;
+    width: 281px;
+    height: 46px;
+    color: #d9d9d9;
+  }
+
+  .dashboard1{
+  top: 20px;
+  left: 63px;
+  font-weight: 500;
+  display: inline-block;
+  width: 240px;
+  height: 46px;
+  background-color: #4561BC;
+  border: none;
+  border-radius: 7px;
+  margin-left: -20px;
+  margin-top: -110px;
+  color: white;
+  text-align: left;
+  }
+
+  .dashboard{
+    top: 317px;
+    left: -10px;
+    width: 323px;
+    height: 73px;
+    padding-bottom: 1.5rem;
+    
+  }
+  
+  .dashboard1,
+  .main-item,
+  .dashboard {
+    position: absolute;
+  }
+
+  .main-item {
+    top: 436px;
+    left: 45px;
+    width: 58px;
+    height: 48px;
+    object-fit: cover;
+  }
+
+.banks{
+    position: absolute;
+    top: 444px;
+    left: 50px;
+    font-weight: 600;
+    display: inline-block;
+    width: 258px;
+    height: 40px;
+    margin-top: -160px;
+}
+
+.usa-bank{
+    color: #d9d9d9;
+    font-weight: 500;
+    display: inline-block;
+    width: 240px;
+    height: 46px;
+    background-color: transparent;
+    border: none;
+    margin-left: -15px;
+    text-align: left;
+    justify-items: self-end;
+}
+
+.usa-bank:hover{
+    background-color: aliceblue;
+    border-radius: 7px;
+    color: #000;
+}
+
+/* Style the button and dropdown content */
+.dropbtn {
+    background-color: transparent;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: transparent;
+    min-width: 200px;
+    z-index: 1;
+    animation: fall-out 0.3s ease-out;
+  }
+  
+  /* Add animation on dropdown display */
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  /* Show the dropdown content when the button is clicked */
+  .dropdown:hover .dropdown-content {
+    display: block;
+    margin-left: 3rem;
+  }
+  
+  /* Style the anchor tags inside the dropdown */
+  .dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease-out;
+  }
+  
+  /* Change anchor tag background color on hover */
+  .dropdown-content a:hover {
+    background-color: transparent;
+  }
+  
+  /* Horizontally arrange the anchor tags */
+  .dropdown-content a {
+    float: none;
+  }
+  
+  .dropdown-content a + a {
+    margin-top: 0;
+  }
+  
+  .sub-Banks{
+       color: #ffff;
+       background-color: transparent;
+       border: none;
+       display: inline-block;
+       justify-content: space-between;
+       width: 240px;
+       height: 46px;
+       text-align: left;
+  }
+
+  .sub-Banks:hover{
+    background-color: aliceblue;
+    border-radius: 7px;
+    color: #000;
+  }
+
+  .custom-click-effect:focus{
+    display: none;
+
+  }
+
+  div{
+    display: block;
+  }
+
+  .card{
+    margin-bottom: 2.2rem;
+    width: 300px;
+    border: none;
+  }
+
+  .card-header{
+    border: none;
+  }
+
+  h6{
+    display: block;
+    font-size: 0.67em;
+    margin-block-start: 2.33em;
+    margin-block-end: 2.33em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+  }
+
+  /*
+  .content{
+    position: absolute;
+    bottom: 50px;
+    left: 60px;
+    gap: 140px;
+    flex:1;
+    margin-bottom: 2.2rem;
+  }
+  */
+
+  .content{
+    left:60px;
+    gap: 100px;
+  }
+
+  .browse{
+    position: relative;
+    font-weight: 500;
+    display: inline-block;
+    width: 600px;
+    height: 100%;
+    flex-shrink: 300;
+  }
+ 
+  .our{
+    position: relative;
+    font-weight: 500;
+    display: inline-block;
+    width: 600px;
+    height: 150px;
+    flex-shrink: 0;
+    justify-content: center;
+  }
+
+  .card2{
+    position: relative;
+    margin-bottom: 2.2rem;
+    gap: 100px;
+    display: flex;
+    width: 600px;
+  }
+ 

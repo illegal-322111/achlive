@@ -1,0 +1,187 @@
+
+{% extends 'categorybase.html' %}
+        {% load static %}
+    {% block content %}    
+        <!------Sidebar end------------------>
+        
+        {% if category.location == -1 %}   
+        <h2 style="color:white">{{category.name}}</h2>
+        <div class="table-responsive">
+            <input type="text" value="75" name="price" hidden=""><input type="text" value="85" name="price" hidden=""><input type="text" value="100" name="price" hidden=""><input type="text" value="163" name="price" hidden=""><input type="text" value="150" name="price" hidden=""><input type="text" value="210" name="price" hidden=""><input type="text" value="360" name="price" hidden=""><input type="text" value="487" name="price" hidden=""><table class="table table-striped dataTable-table" id="barclays">
+                <thead>
+                    <form action="shipping.php" method="post"></form>
+                        <tr>
+                            <th data-sortable="" style="width: 4.69208%;"><a href="#" class="dataTable-sorter text-white">id</a></th>
+                            <th data-sortable="" style="width: 11.7302%;"><a href="#" class="dataTable-sorter text-white">Balance</a></th>
+                            <th data-sortable="" style="width: 26.2463%;"><a href="#" class="dataTable-sorter text-white">Title</a></th>
+                            <th data-sortable="" style="width: 21.9941%;"><a href="#" class="dataTable-sorter text-white">Info</a></th>
+                            <th data-sortable="" style="width: 9.97067%;"><a href="#" class="dataTable-sorter text-white">Price</a></th>
+                            <th data-sortable="" style="width: 15.1026%;"><a href="#" class="dataTable-sorter text-white">Status</a></th>
+                            <th data-sortable="" style="width: 10.2639%;"><a href="#" class="dataTable-sorter text-white">Action</a></th>
+                        </tr>
+                    
+                    <!-- PHP CODE TO FETCH DATA FROM ROWS -->
+                </thead>
+                {% for product in products %}
+                <tbody>
+                    <form action="#" method="post"></form>
+                        <tr>
+                            <td class="text-white">1</td>
+                            <td class="text-white">${{product.Balance}}</td>
+                            
+
+                            <td class="text-white">{{product.Title}}</td>
+                            <td class="text-white">{{product.Info}}</td>
+                            <td class="text-white">${{product.price}}</td>
+                            {% if product.Status %}
+                                        <td><label class="btn btn-success blink_me">Available</label></td>
+                                    <td><a href="{% url 'payment:buy' product.id %}"><button class="btn btn-primary" type="submit" role="button">Buy <svg class="svg-inline--fa fa-cart-arrow-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="cart-arrow-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+                                                <path fill="currentColor" d="M0 24C0 10.75 10.75 0 24 0H96C107.5 0 117.4 8.19 119.6 19.51L121.1 32H312V134.1L288.1 111C279.6 101.7 264.4 101.7 255 111C245.7 120.4 245.7 135.6 255 144.1L319 208.1C328.4 218.3 343.6 218.3 352.1 208.1L416.1 144.1C426.3 135.6 426.3 120.4 416.1 111C407.6 101.7 392.4 101.7 383 111L360 134.1V32H541.8C562.1 32 578.3 52.25 572.6 72.66L518.6 264.7C514.7 278.5 502.1 288 487.8 288H170.7L179.9 336H488C501.3 336 512 346.7 512 360C512 373.3 501.3 384 488 384H159.1C148.5 384 138.6 375.8 136.4 364.5L76.14 48H24C10.75 48 0 37.25 0 24V24zM224 464C224 490.5 202.5 512 176 512C149.5 512 128 490.5 128 464C128 437.5 149.5 416 176 416C202.5 416 224 437.5 224 464zM416 464C416 437.5 437.5 416 464 416C490.5 416 512 437.5 512 464C512 490.5 490.5 512 464 512C437.5 512 416 490.5 416 464z">
+                                                </path>
+                                            </svg><!-- <i class="fas fa-cart-arrow-down"></i> Font Awesome fontawesome.com --></button></a></td>
+                                                {% else %}
+                                                <td><label class="btn btn-danger blink_me">Sold Out</label></td>
+                                    <td><button class="btn btn-danger" type="submit" role="button">Booked <svg class="svg-inline--fa fa-cart-arrow-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="cart-arrow-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+                                                <path fill="currentColor" d="M0 24C0 10.75 10.75 0 24 0H96C107.5 0 117.4 8.19 119.6 19.51L121.1 32H312V134.1L288.1 111C279.6 101.7 264.4 101.7 255 111C245.7 120.4 245.7 135.6 255 144.1L319 208.1C328.4 218.3 343.6 218.3 352.1 208.1L416.1 144.1C426.3 135.6 426.3 120.4 416.1 111C407.6 101.7 392.4 101.7 383 111L360 134.1V32H541.8C562.1 32 578.3 52.25 572.6 72.66L518.6 264.7C514.7 278.5 502.1 288 487.8 288H170.7L179.9 336H488C501.3 336 512 346.7 512 360C512 373.3 501.3 384 488 384H159.1C148.5 384 138.6 375.8 136.4 364.5L76.14 48H24C10.75 48 0 37.25 0 24V24zM224 464C224 490.5 202.5 512 176 512C149.5 512 128 490.5 128 464C128 437.5 149.5 416 176 416C202.5 416 224 437.5 224 464zM416 464C416 437.5 437.5 416 464 416C490.5 416 512 437.5 512 464C512 490.5 490.5 512 464 512C437.5 512 416 490.5 416 464z">
+                                                </path>
+                                            </svg><!-- <i class="fas fa-cart-arrow-down"></i> Font Awesome fontawesome.com --></button></td>
+                                                {% endif %}
+                        </tr>
+                    
+                </tbody>
+                {% endfor %}
+
+
+
+
+
+
+
+
+            </table>
+        </div>
+
+        <footer>
+            <div class="footer clearfix mb-0 text-muted">
+                <div class="float-start">
+                    <p></p>
+                </div>
+                <div class="float-end">
+
+                </div>
+            </div>
+        </footer>
+    
+    
+    
+    {% else %}
+        <div class="page-heading">
+            <div class="page-title">
+                <div class="row">
+                    <div class="col-12 col-md-6 order-md-1 order-last">
+                        <h3>{{category.name}}</h3>
+                        <p class="text-subtitle text-muted">[Online Access]+[Account/Routine Number]+[Name And Address]+[Email Access]+[Credit Card Details]</p>
+                    </div>
+                    <div class="col-12 col-md-6 order-md-2 order-first">
+                        <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a></li>
+                                <li class="" aria-current="page">{{category.name}}</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <section class="section">
+                <div class="card">
+                    <div class="card-header">
+                        {{category.name}}
+                    </div>
+                    <div class="card-body">
+                        <input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="75" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="90" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="120" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="220" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="380" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="430" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="550" name="price" hidden=""><table class="table table-bordered table-responsive" id="boa">
+                            <thead>
+                                <form action="add_balance.php" method="post"></form>
+                                    <tr>
+                                        
+                                        <th class="text-white">#</th>
+                                        <th class="text-white">Balance</th>
+                                        <th class="text-white">Title</th>
+                                        <th class="text-white">Info</th>
+                                        <th class="text-white">Price</th>
+                                        <th class="text-white">Status</th>
+                                        <th class="text-white">Action</th>
+                                    </tr>
+
+
+
+                            </thead>
+
+
+                            <tbody>
+
+
+
+
+
+                            </tbody>
+                            {% for product in  products%}
+                            <tbody>
+                                
+                                    <tr>
+                                        
+                                        <td class="text-white">1</td>
+                                        <td class="text-white">${{product.Balance}}</td>
+                                        <td class="text-white">{{product.Title}}</td>
+                                        <td class="text-white">{{product.Info}}</td>
+                                        <td class="text-white">${{product.price}}</td>
+                                        
+                                        {% if product.Status %}
+                                        <td><label class="btn btn-success blink_me">Available</label></td>
+                                    <td><a href="{% url 'payment:buy' product.id %}"><button class="btn btn-primary" type="submit" role="button">Buy <svg class="svg-inline--fa fa-cart-arrow-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="cart-arrow-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+                                                <path fill="currentColor" d="M0 24C0 10.75 10.75 0 24 0H96C107.5 0 117.4 8.19 119.6 19.51L121.1 32H312V134.1L288.1 111C279.6 101.7 264.4 101.7 255 111C245.7 120.4 245.7 135.6 255 144.1L319 208.1C328.4 218.3 343.6 218.3 352.1 208.1L416.1 144.1C426.3 135.6 426.3 120.4 416.1 111C407.6 101.7 392.4 101.7 383 111L360 134.1V32H541.8C562.1 32 578.3 52.25 572.6 72.66L518.6 264.7C514.7 278.5 502.1 288 487.8 288H170.7L179.9 336H488C501.3 336 512 346.7 512 360C512 373.3 501.3 384 488 384H159.1C148.5 384 138.6 375.8 136.4 364.5L76.14 48H24C10.75 48 0 37.25 0 24V24zM224 464C224 490.5 202.5 512 176 512C149.5 512 128 490.5 128 464C128 437.5 149.5 416 176 416C202.5 416 224 437.5 224 464zM416 464C416 437.5 437.5 416 464 416C490.5 416 512 437.5 512 464C512 490.5 490.5 512 464 512C437.5 512 416 490.5 416 464z">
+                                                </path>
+                                            </svg><!-- <i class="fas fa-cart-arrow-down"></i> Font Awesome fontawesome.com --></button></a></td>
+                                                {% else %}
+                                                <td><label class="btn btn-danger blink_me">Sold Out</label></td>
+                                    <td><button class="btn btn-danger" type="submit" role="button">Booked <svg class="svg-inline--fa fa-cart-arrow-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="cart-arrow-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg="">
+                                                <path fill="currentColor" d="M0 24C0 10.75 10.75 0 24 0H96C107.5 0 117.4 8.19 119.6 19.51L121.1 32H312V134.1L288.1 111C279.6 101.7 264.4 101.7 255 111C245.7 120.4 245.7 135.6 255 144.1L319 208.1C328.4 218.3 343.6 218.3 352.1 208.1L416.1 144.1C426.3 135.6 426.3 120.4 416.1 111C407.6 101.7 392.4 101.7 383 111L360 134.1V32H541.8C562.1 32 578.3 52.25 572.6 72.66L518.6 264.7C514.7 278.5 502.1 288 487.8 288H170.7L179.9 336H488C501.3 336 512 346.7 512 360C512 373.3 501.3 384 488 384H159.1C148.5 384 138.6 375.8 136.4 364.5L76.14 48H24C10.75 48 0 37.25 0 24V24zM224 464C224 490.5 202.5 512 176 512C149.5 512 128 490.5 128 464C128 437.5 149.5 416 176 416C202.5 416 224 437.5 224 464zM416 464C416 437.5 437.5 416 464 416C490.5 416 512 437.5 512 464C512 490.5 490.5 512 464 512C437.5 512 416 490.5 416 464z">
+                                                </path>
+                                            </svg><!-- <i class="fas fa-cart-arrow-down"></i> Font Awesome fontawesome.com --></button></td>
+                                                {% endif %}
+                                    </tr>
+                                
+                                
+
+
+
+                            </tbody>
+                            {% endfor %}
+                            
+
+
+
+                            
+
+
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+        <footer>
+            <div class="footer clearfix mb-0 text-muted">
+                <div class="float-start">
+                    <p></p>
+                </div>
+                <div class="float-end">
+
+                </div>
+            </div>
+        </footer>
+        {% endif %}
+          
+       
+    {% endblock content %}
+    

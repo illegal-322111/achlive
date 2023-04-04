@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ACHLOGs</title>
+    </head>
+    <body>
+        <h2>ACHLOGS STORE</h2>
+        <div class="cont">
+            <div class="form">
+                
+              <form method="post">
+                {% csrf_token %}
+                <h1>Login</h1>
+                <input type="email" name="username" class="user" placeholder="Email">
+                <input type="password" name="password" class="pass" placeholder="Password">
+                <button class="login" type="submit">Login</button>
+              </form>
+            </div>
+            <a href="{% url 'account:register' %}" style="color: white; text-decoration: none;">Signup</a>
+            {% if form.errors %}
+            <div id="popup">
+                Username or Password is incorrect!
+            </div>
+            {% endif %}
+        </div>
+        <style>
+             @import url('https://fonts.googleapis.com/css?family=Raleway:300,400,700');
+
+                *{
+                margin: 0;
+                padding: 0;
+                outline: none;
+                box-sizing: border-box;
+                font-family: 'Raleway', sans-serif;
+                }
+
+                body{ background: #090c0e; }
+
+                .cont{
+                position: relative;
+                width: 25%;
+                height: 400px;
+                padding: 10px 25px;
+                margin: 10vh auto;
+                background: #fff;
+                border-radius: 8px;
+                }
+
+                .form{ width: 100%; height: 100%; }
+
+                h1, h2, .user, .pass{ 
+                text-align: center;
+                display: block;
+                }
+
+                h1{ 
+                color: #606060;
+                font-weight: bold;
+                font-size: 40px;
+                margin: 30px auto;
+                }
+
+                .user, .pass, .login{
+                width: 100%;
+                height: 45px;
+                border: none;
+                border-radius: 5px;
+                font-size: 20px;
+                font-weight: lighter;
+                margin-bottom: 30px;
+                }
+
+                .user, .pass{ background: #ecf0f1; }
+
+                .login{
+                color: #fff;
+                cursor: pointer;
+                margin-top: 20px;
+                background: #3598dc;
+                transition: background 0.4s ease;
+                }
+
+                .login:hover{ background: #3570dc; }
+
+                @media only screen and (min-width : 280px) {
+                .cont{ width: 90% }
+                }
+
+                @media only screen and (min-width : 480px) {
+                .cont{ width: 60% }
+                }
+
+                @media only screen and (min-width : 768px) {
+                .cont{ width: 40% }
+                }
+
+                @media only screen and (min-width : 992px) {
+                .cont{ width: 30% }
+                }
+
+                h2{ color: #fff; margin-top: 25px; }
+
+        </style>
+        <style>
+            .card-body{
+         width: 800px;
+         overflow-x: scroll;
+ 
+            }
+            @media screen and (max-width:900px) {
+                .card-body{
+                width: 300px;
+                }  
+            }
+
+            #popup {
+			display: block;
+			position: fixed;
+			top: 13%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 1005;
+			height: 60px;
+			background-color: red;
+			color: white;
+			text-align: center;
+			padding: 10px;
+			border-radius: 10px;
+			font-size: 20px;
+			font-weight: bold;
+			z-index: 1;
+		}
+        </style>
+    </body>
+</html>

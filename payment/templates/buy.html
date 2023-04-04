@@ -1,0 +1,112 @@
+
+
+{% extends 'categorybase.html' %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center" style="color: white;">Email Confirmation</h3><img src="{% static 'images/logotop.svg' %}" height="22" width="94">
+                </div>
+
+
+
+
+                <!-- Button trigger modal -->
+                <div class="card-body" style="overflow-x: hidden;display:flex;flex-direction:column;justify-content:center;background-color:black;padding:3rem">
+                    Your Current Email :
+
+                    <input type="text" id="email" style="text-transform:uppercase;" placeholder="Enter Your Email" value="{{request.user.email}}" readonly>
+                    <p>NOTE: Double-check the email address you enter to receive the logs. The relevant information for cashing out on purchases will also be sent to the email address you supplied above along with the log details. If you have any questions after receiving the email, get in touch with customer care.</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        SUBMIT
+                    </button>
+
+
+
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog " role="document">
+                        <div class="modal-content" style="background-color:black;">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Your Log </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body ">
+
+                                <div class="text-center " style="border-radius:4px;padding:2rem; background-color: black;color:white;width:400px;margin:0 auto;">
+                                    <form action="addbalance.php" method="post">
+                                        <h2 style="color:white">Your Log</h2>
+                                        <input type="text" hidden="" name="price" value="90">
+
+                                        Email to be sent to
+                                        <input type="text" id="emaill" name="email" value="{{request.user.email}}" readonly>
+                                        <br>
+                                        Price $<span style=";">{{price}}</span><br>
+                                                                                          <!-- Includes<span> [Online Access]+[Account/Routine Number]+[Name And Address]+[Email Access]+[Credit Card Details]</span> -->
+
+                                                                            </form></div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalTwo">Use Balance</button>
+                               
+                                <a href="{% url 'payment:create_payment' product.id %}"><button type="submit" class="btn btn-primary">Buy Directly</button></a>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="modal fade " id="ModalTwo" tabindex="-1" role="dialog" aria-labelledby="ModalTwo" aria-hidden="true" style="background-color: black;">
+                    <div class="modal-dialog " role="document">
+                        <div class="modal-content" style="background-color:black;">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ModalTwo" style="color:white">Your Log </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body ">
+
+                                <div class="text-center " style="border-radius:4px;padding:2rem; background-color: black;color:white;width:400px;margin:0 auto;">
+                                  <form  method="post">
+                                    {% csrf_token %}
+                                   
+                                    Balance : ${% for b in balance %}{{b.balance}}{% endfor %} <br>
+        Logs Price: ${{price}}            <br>
+        Remaining :${{remain}}            <input type="text" hidden="" name="price" value="90">
+                                            
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Proceed</button>
+
+        </div>
+                                </form></div>
+
+
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+    {% endblock content %}

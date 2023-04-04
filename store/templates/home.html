@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+	 <!------Sidebar end------------------>
+	
+	 	{% block content %}
+
+		<div class="main-container" style="position:absolute ;right: 6rem;width: 70%;">
+			<div class="container mt-5 ml-5">
+				<div class="display-4 h5" style="
+							color: rgb(255, 232, 232);
+							padding-left: 5px;
+							padding-right: 5px;
+							font-size: 20px;
+							margin-left: -15px;
+						">
+					WELCOME TO ACHLOGS
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12 col-md-4" style="padding-left: 5px; padding-right: 5px">
+						<div class="kanban-col" tabindex="0">
+							<div class="card-list">
+								<div class="card-list-header">
+									<h6 style="color: white;">Recently..</h6>
+								</div>
+								{% for category in category %}
+								<div class="card-list-body" tabindex="0">
+									<div class="card card-kanban" tabindex="0" style="background-color: #212029">
+										<div class="card-body">
+											<div class="card-title">
+												<h6>
+													{{category.name}}(full info)
+												</h6>
+												<p style="color: #fff">
+													Added {{category.number}} items in
+													category
+													<a class="text-danger" href="{{category.get_absolute_url}}">{{category.name}}(full
+														info)</a>
+												</p>
+											</div>
+
+											<div class="card-meta d-flex justify-content-between">
+												<span class="text-small date-time text-right" style="color: #fff">30-3-2023</span>
+											</div>
+										</div>
+									</div>
+
+									
+
+
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+
+					<div class="col-xs-12 col-md-8" style="padding-left: 5px; padding-right: 5px">
+						<div class="card">
+							<div class="card-header" style="background-color: rgb(3, 3, 95);color:white">
+								<span class="glyphicon glyphicon-calendar" style="color: #000;"></span>
+								Browse our store, buy and invite your
+								friends . Our store has been selling bank
+								logs to millions of users in the darkweb! we
+								have been working on spamming bank logs
+								since 2017 and we maintain the position that
+								"customers are always right" as long as the
+								customer's actions or requests are not
+								contrary to our store rules. If you need
+								various bank logs and cashapp logs click on
+								the dropdown menu to browse our Logs, After
+								making a purchase, the log details will be
+								sent to your email address and you will have
+								a countdown of 48 hours to confirm the log
+								details and if you have the correct cashout
+								method
+
+
+							</div>
+						</div>
+
+
+
+						<div class="card card-note" style="background-color: rgb(3, 3, 95);color:white">
+							<div class="card-header">
+								<div class="media align-items-center">
+									<div class="media-body">
+										<h6 class="mb-0 H6-filter-by-text" data-filter-by="text" style="color: white;">
+											Our store is one of the best
+											underground tools for selling
+											websites owned by an anonymous
+											hacktivist group. Our store is
+											one of the best underground
+											tools selling websites owned by
+											the anonymous hacktivist group.
+										</h6>
+									</div>
+								</div>
+								<div class="d-flex align-items-center">
+									<span data-filter-by="text" class="SPAN-filter-by-text"></span>
+									<div class="ml-1 dropdown card-options">
+										<button class="btn-options" type="button" id="note-dropdown-button-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+										</button>
+										<div class="dropdown-menu dropdown-menu-right">
+											<a class="dropdown-item" href="#">Mark As Read</a>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+{% endblock content %}	
