@@ -28,7 +28,6 @@
                 {% for field in form %}
                 {% if field.errors %}
                 <div id="popup">
-                    <p>Please correct the following errors:</p>
                     {{ field.label }}: {{ field.errors|striptags }}
                 </div>
             {% endif %}
