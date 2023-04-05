@@ -26,7 +26,7 @@
                 <tbody>
                     <form action="#" method="post"></form>
                         <tr>
-                            <td class="text-white">1</td>
+                            <td class="text-white">{{product.id}}</td>
                             <td class="text-white">${{product.Balance}}</td>
                             
 
@@ -49,6 +49,8 @@
                         </tr>
                     
                 </tbody>
+                {% empty %}
+                    <tbody><tr><td class="dataTables-empty" colspan="6">No entries Yet</td></tr></tbody>
                 {% endfor %}
 
 
@@ -129,7 +131,7 @@
                                 
                                     <tr>
                                         
-                                        <td class="text-white">1</td>
+                                        <td class="text-white">{{product.id}}</td>
                                         <td class="text-white">${{product.Balance}}</td>
                                         <td class="text-white">{{product.Title}}</td>
                                         <td class="text-white">{{product.Info}}</td>
@@ -155,6 +157,8 @@
 
 
                             </tbody>
+                            {% empty %}
+                    <tbody><tr><td class="dataTables-empty" colspan="6">No entries Yet</td></tr></tbody>
                             {% endfor %}
                             
 
