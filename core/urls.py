@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from account.forms import (UserLoginForm)
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('longi/', admin.site.urls),
     path('index/', include('store.urls')),
     path('', auth_views.LoginView.as_view(template_name='account/registration/login.html',
                                                 form_class=UserLoginForm), name='login'),

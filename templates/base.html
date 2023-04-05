@@ -221,10 +221,9 @@
 				{% if invoice %}
 				
 				Command: toastr["success"]("Just purchased ${{invoice.product.Balance}} {{invoice.product.name}} ", "{{request.user.user_name}} ")
-				
-				{% endif %}
 				{% else %}
 				Command: toastr["success"]("Just purchased Huntington log ", "Reuben Martin ")
+				{% endif %}
 				{% endif %}
 				toastr.options = {
 					"closeButton": true,
