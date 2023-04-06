@@ -83,7 +83,7 @@
                             <ul class="submenu ">
                                 {% for category in canada %}
                                 <li class="submenu-item ">
-                                    <a href="cibc.php">{{category.name}}</a>
+                                    <a href="{{category.get_absolute_url}}">{{category.name}}</a>
                                 </li>
                                 {% endfor %}
                             </ul>
