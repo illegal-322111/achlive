@@ -176,7 +176,11 @@ def buy(request,pk):
     balance = Balance.objects.filter(created_by=request.user).first()
     if balance:
         b = balance.balance
-        remaining = int(price - b)
+        if b > 0:
+            remaining = int(price - b)
+        else:
+            b = 0
+            balance.save()
         if remaining < 0:
             remaining = 0
     else:
