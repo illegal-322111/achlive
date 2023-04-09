@@ -145,10 +145,7 @@ LOGOUT_REDIRECT_URL = 'account:login'
 
 
 
-SESSION_COOKIE_AGE = 86400
-CART_SESSION_ID = 'cart'
-STRIPE_PUB_KEY = 'pk_test_51LsYgMIm06Z4dmHxF0qbBYB2GqRQC77NRCrOlsZwPEnbxUOuuDmHXKC5lg9LEKtxYNM0LpaRjZ2G9XnVPsGN6B2y00cN5t49p7'
-STRIPE_SECRET_KEY = 'sk_test_51LsYgMIm06Z4dmHxYoYxl1NfwANfvRmTAuDUTJT4SWueF62xPD8r5lYNunduruEmLpO6XcHOVRLpy2qx8WpW2gwj00kcLeYU9z'
+API_KEY = "ZLHYiSkDEHzZFHHtgWmUvyODD3wA9H67PDgjjzjnFV4"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
