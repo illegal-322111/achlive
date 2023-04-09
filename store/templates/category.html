@@ -26,7 +26,8 @@
                 <tbody>
                     <form action="#" method="post"></form>
                         <tr>
-                            <td class="text-white">{{product.id}}</td>
+                            {% set product_counter = loop.index0 + 1 %}
+                            <td class="text-white">{{ product_counter }}</td>
                             <td class="text-white">${{product.Balance}}</td>
                             
 
@@ -130,8 +131,8 @@
                             <tbody>
                                 
                                     <tr>
-                                        
-                                        <td class="text-white">{{product.id}}</td>
+                                        {% set product_counter = loop.index0 + 1 %}
+                                        <td class="text-white">{{ product_counter }}</td>
                                         <td class="text-white">${{product.Balance}}</td>
                                         <td class="text-white">{{product.Title}}</td>
                                         <td class="text-white">{{product.Info}}</td>
