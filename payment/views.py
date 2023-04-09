@@ -176,11 +176,12 @@ def buy(request,pk):
     balance = Balance.objects.filter(created_by=request.user).first()
     if balance:
         b = balance.balance
-        if b is not None or b > 0:
+        if b is not None:
             remaining = int(price - b)
         else:
             b = 0
             balance.save()
+            remaining = int(price - b)
         if remaining < 0:
             remaining = 0
     else:
