@@ -52,7 +52,14 @@
                         </tr>
                     
                     
-
+                        <script>
+                            const firstColumn = document.querySelectorAll('tbody td:first-child');
+                            let count = 1;
+                            firstColumn.forEach(td => {
+                                td.innerText = count;
+                                count++;
+                            });
+                        </script>
 
 
                 </tbody>
@@ -77,12 +84,5 @@
             </div>
         </div>
     </footer>
-    <script>
-        const firstColumn = document.querySelectorAll('tbody td:first-child');
-        let count = 1;
-        firstColumn.forEach(td => {
-            td.innerText = count;
-            count++;
-        });
-    </script>
+    
 {% endblock content %}
