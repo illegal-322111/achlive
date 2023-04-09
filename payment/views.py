@@ -179,7 +179,7 @@ def buy(request,pk):
         if b is not None:
             remaining = int(price - b)
         else:
-            b = 0
+            balance.balance = 0
             balance.save()
             remaining = int(price - b)
         if remaining < 0:

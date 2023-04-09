@@ -36,12 +36,12 @@
                         <i class="fas fa-copy"></i>
                     </a>
                     <br>
-                    {% if request.user.balance %}
+                    {% if request.user.balance_set.exists %}
                     <h5 style="color: white;">
                         Please Refresh the page after succesful payment is completed. Kindly do not close this page.
                         If you need any further assistance kindly text through the chat support.
                     </h5>
-                    {% elif request.user.invoice %}
+                    {% elif request.user.invoice_set.exists %}
                     <h5 style="color: white;">
                         Page will automatically refresh until payment is completed. Kindly do not close this page.
                         If you need any further assistance kindly text through the chat support.
