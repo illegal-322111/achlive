@@ -38,7 +38,7 @@
                                 
                         <tr>
                             
-                            <td class="text-white">{{p.product.id}}</td>
+                            <td class="text-white">1</td>
                             <td class="text-white">{{p.created_at}}</td>
                             <td class="text-white">{{p.product.category.name}}</td>
                             <td class="text-white">{{p.product.Info}}</td>
@@ -77,4 +77,12 @@
             </div>
         </div>
     </footer>
+    <script>
+        const firstColumn = document.querySelectorAll('tbody td:first-child');
+        let count = 1;
+        firstColumn.forEach(td => {
+            td.innerText = count;
+            count++;
+        });
+    </script>
 {% endblock content %}
