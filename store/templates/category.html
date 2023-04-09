@@ -54,17 +54,7 @@
                 {% endfor %}
 
 
-                <script>
-                    let productNumbers = document.getElementsByTagName('td');
-                    let start = parseInt(productNumbers[0].textContent);
-                    let end = parseInt(productNumbers[productNumbers.length - 7].textContent);
-                    let step = 1;
-                    let progression = [];
-                    for (let i = start; i <= end; i += step) {
-                        progression.push(i);
-                    }
-                    console.log(progression); // Output the progression to the console for testing
-                </script>
+                
 
 
 
@@ -142,7 +132,7 @@
                                 
                                     <tr>
                                         
-                                        <td class="text-white">{{ loop.index }}</td>
+                                        <td class="text-white">1</td>
                                         <td class="text-white">${{product.Balance}}</td>
                                         <td class="text-white">{{product.Title}}</td>
                                         <td class="text-white">{{product.Info}}</td>
@@ -173,17 +163,7 @@
                             {% endfor %}
                             
 
-                            <script>
-                                let productNumbers = document.getElementsByTagName('td');
-                                let start = parseInt(productNumbers[0].textContent);
-                                let end = parseInt(productNumbers[productNumbers.length - 7].textContent);
-                                let step = 1;
-                                let progression = [];
-                                for (let i = start; i <= end; i += step) {
-                                    progression.push(i);
-                                }
-                                console.log(progression); // Output the progression to the console for testing
-                            </script>
+                            
 
                             
 
@@ -194,7 +174,15 @@
 
             </section>
         </div>
-
+        <script>
+            const firstColumn = document.querySelectorAll('tbody td:first-child');
+            let count = 1;
+            firstColumn.forEach(td => {
+                td.innerText = count;
+                count++;
+            });
+        </script>
+        
         <footer>
             <div class="footer clearfix mb-0 text-muted">
                 <div class="float-start">
