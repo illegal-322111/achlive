@@ -82,6 +82,7 @@ def receive_payment(request):
     invoice.status = int(status)
     if (int(status) == 2):
         invoice.received = value
+        invoice.sold = True
         
     invoice.txid = txid
     invoice.save()
