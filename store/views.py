@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
 from payment.models import *
+from django.contrib.auth.decorators import login_required
+@login_required
 def home(request):
     invoice = Invoice.objects.filter(created_by=request.user).first()
     return render(request,"home.html",context={"invoice":invoice})
