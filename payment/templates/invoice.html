@@ -38,19 +38,19 @@
                     {% if request.user.balance_set.exists %}
                     <h5 style="color: white;">
                         Page will automatically refresh until payment is completed. Kindly do not close this page.
-                        If you need any further assistance kindly text through the chat support or <a href="tg://resolve?domain=@achlogadmin">Text me on Telegram</a>
+                        If you need any further assistance kindly text through the chat support or <a href="tg://resolve?domain=@achlogadmin">Text us on Telegram</a>
 
                     </h5>
                     {% elif request.user.invoice_set.exists %}
                     <h5 style="color: white;">
                         Page will automatically refresh until payment is completed. Kindly do not close this page.
-                        If you need any further assistance kindly text through the chat support or <a href="tg://resolve?domain=@achlogadmin">Text me on Telegram</a>
+                        If you need any further assistance kindly text through the chat support or <a href="tg://resolve?domain=@achlogadmin">Text us on Telegram</a>
                     </h5>
                     {% else %}
                     <h5 style="color: white;">
                         Page will automatically refresh until payment is completed. Kindly do not close this page. You are required to send a threshold 
-                        of $20 minimum or your balance will not be updated.
-                        If you need any further assistance kindly text through the chat support or <a href="tg://resolve?domain=@achlogadmin">Text me on Telegram</a>
+                        of $1 minimum or your balance will not be updated.
+                        If you need any further assistance kindly text through the chat support or <a href="tg://resolve?domain=@achlogadmin">Text us on Telegram</a>
                     </h5>
                     {% endif %}
                 </div>
