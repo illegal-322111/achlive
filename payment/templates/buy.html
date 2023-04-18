@@ -82,7 +82,7 @@
                                   <form  method="post">
                                     {% csrf_token %}
                                    
-                                    Balance : ${% for b in balance %}{{b.balance}}{% endfor %} <br>
+                                    Balance : ${{balance}} <br>
         Logs Price: ${{price}}            <br>
         Remaining :${{remain}}            <input type="text" hidden="" name="price" value="90">
                                             
