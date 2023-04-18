@@ -13,7 +13,9 @@ def categories(request):
 
 def balance(request):
     if request.user.is_authenticated:
-        return {'balance': Balance.objects.filter(created_by=request.user)}
+        balance = Balance.objects.filter(created_by=request.user)
+        b = round(balance, 2)
+        return {'balance': b}
     else:
         b = 0.00
         return {'balance': b}
