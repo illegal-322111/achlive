@@ -12,5 +12,5 @@ class InvoiceAdmin(admin.ModelAdmin):
             'fields': ('status', 'order_id', 'address', 'btcvalue', 'received', 'balance', 'created_by','created_at')
         }),
     )
-admin.site.register(InvoiceAdmin, Invoice)
+admin.site.register(Invoice, InvoiceAdmin)
 admin.site.register(Balance)
