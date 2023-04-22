@@ -38,17 +38,17 @@
                                 
                         <tr>
                             
-                            <td class="text-white">{{p.product.id}}</td>
+                            <td class="text-white">{{p.order_id}}</td>
                             <td class="text-white">{{p.created_at}}</td>
                             <td class="text-white">{{p.product.category.name}}</td>
                             <td class="text-white">{{p.product.Info}}</td>
                             <td class="text-white">${{p.product.price}}</td>
                             
-                            {% if p.product.Status %}
-                            <td><label class="btn btn-success blink_me">Available</label></td>
-                                    {% else %}
-                                    <td><label class="btn btn-danger blink_me">Sold Out</label></td>
-                                    {% endif %}
+                            
+                            
+                                    
+                                    <td><label class="btn btn-danger blink_me">Booked</label></td>
+                                    
                         </tr>
                     
                     
