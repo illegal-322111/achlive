@@ -1,6 +1,7 @@
 from django.db import models
 from store.models import Product
 from account.models import Customer
+from django.utils import timezone
 class Invoice(models.Model):
     STATUS_CHOICES = ((-1,"Not Started"),(0,'Unconfirmed'), (1,"Partially Confirmed"), (2,"Confirmed"))
 
@@ -12,7 +13,7 @@ class Invoice(models.Model):
     received = models.FloatField(blank=True, null=True)
     txid = models.CharField(max_length=250, blank=True, null=True)
     rbf = models.IntegerField(blank=True, null=True)
-    created_at = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(Customer, on_delete=models.CASCADE)
     sold = models.BooleanField(default=False)
 
