@@ -21,7 +21,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    PURCHASE HISTORY
+                    PURCHASE HISTORY for {{request.user.user_name}}
                 </div>
                 <div class="card-body">
                     <div class="dataTable-wrapper dataTable-loading dataTable-empty no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-dropdown"><select class="dataTable-selector form-select"><option value="5">5</option><option value="10" selected="">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option></select><label>entries per page</label></div><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-striped dataTable-table" id="transactions_logs">
@@ -38,7 +38,7 @@
                                 
                         <tr>
                             
-                            <td class="text-white">{{p.order_id}}</td>
+                            <td class="text-white">{{p.order_id|slice:8}}</td>
                             <td class="text-white">{{p.created_at}}</td>
                             <td class="text-white">{{p.product.category.name}}</td>
                             <td class="text-white">{{p.product.Info}}</td>
@@ -50,18 +50,6 @@
                                     <td><label class="btn btn-danger blink_me">Booked</label></td>
                                     
                         </tr>
-                    
-                    
-                        <script>
-                            const firstColumn = document.querySelectorAll('tbody td:first-child');
-                            let count = 1;
-                            firstColumn.forEach(td => {
-                                td.innerText = count;
-                                count++;
-                            });
-                        </script>
-
-
                 </tbody>
                     {% empty %}
                     <tbody><tr><td class="dataTables-empty" colspan="6">No entries found</td></tr></tbody>
