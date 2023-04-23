@@ -43,6 +43,8 @@ def track_invoice(request, pk):
             msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
             msg.attach_alternative(html_content, 'text/html')
             msg.send()
+            invoice.product.Status = False
+            invoice.product.save()
             return redirect('account:dashboard')
     else:
         data['paid'] = 0  
@@ -207,6 +209,8 @@ def buy(request,pk):
                 msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
                 msg.attach_alternative(html_content, 'text/html')
                 msg.send()
+                product.Status = False
+                product.save()
                 invoice = Invoice.objects.create(order_id=balance.order_id,
                                 address=balance.address,btcvalue=balance.btcvalue, product=product, 
                                 created_by=request.user,sold=True,received=balance.received)
