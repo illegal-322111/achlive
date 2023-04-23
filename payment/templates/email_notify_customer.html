@@ -37,7 +37,7 @@
 <body>
 	<h1>ORDER CONFIRMED</h1>
 	<p>Dear {{request.user.user_name}}, Your order has been processed successfully.</p>
-	<p>Please click the link below to download your PDF, for ${% for product in product %}{{product.Balance}} {{product.name}}{% endfor %}</p>
+	<p>Please click the link below to download your PDF:</p>
 	<p><a href="{{ order }}" download>Download PDF</a></p>
 	<p><strong>To gain access, visit <a href ="https://achlive.net/index/category/extraction">Visit to buy decryptor</a></strong></p>
 	<p>Thank you for your purchase.</p>

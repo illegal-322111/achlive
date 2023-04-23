@@ -204,7 +204,7 @@ def buy(request,pk):
                 to_email = request.user.email
                 subject = 'Order confirmation'
                 text_content = 'Thank you for the order!'
-                html_content = render_to_string('email_notify_customer.html', {'order': product.pdf.url},{'product':product})
+                html_content = render_to_string('email_notify_customer.html', {'order': product.pdf.url})
 
                 msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
                 msg.attach_alternative(html_content, 'text/html')
