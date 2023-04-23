@@ -33,7 +33,7 @@ def track_invoice(request, pk):
     if (invoice.received):
         data['paid'] =  invoice.received/1e8
         if (int(invoice.btcvalue) <= int(invoice.received)):
-            from_email = "Achlogssupport@achlive.com"
+            from_email = "Achlogs@achlive.net"
 
             to_email = request.user.email
             subject = 'Order confirmation'
@@ -199,12 +199,12 @@ def buy(request,pk):
             else:
                 balance.balance = b - price
                 balance.save()
-                from_email = "Achlogssupport@achlive.com"
+                from_email = "Achlogs@achlive.net"
 
                 to_email = request.user.email
                 subject = 'Order confirmation'
                 text_content = 'Thank you for the order!'
-                html_content = render_to_string('email_notify_customer.html', {'order': product.pdf.url})
+                html_content = render_to_string('email_notify_customer.html', {'order': product.pdf.url},{'product':product})
 
                 msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
                 msg.attach_alternative(html_content, 'text/html')
