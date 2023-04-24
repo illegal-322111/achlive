@@ -37,10 +37,11 @@
 <body>
 	<h1>ORDER CONFIRMED</h1>
 </br>
-	<p>Hello Customer, Your order has been processed successfully.</p>
-	<p>Please click the link below to download your PDF:</p>
-	<p><a href="{{ order }}" download>Download PDF</a></p>
-	<p><strong>To gain access,<a href ="https://achlive.net/index/category/extraction">Press on this to buy a decryptor</a></strong></p>
+	<p>Hello Customer, Your purchase of {{order.name}} log has been processed successfully.</p>
+	<p>Please click the link below to download a PDF containing all necessary information abou the logs</p>
+	<p><a href="{{ order.pdf.url }}" download>Download PDF</a></p>
+	<p>This log has a balance of ${{order.Balance}} as at {{order.created_by}}</p>
+	<p><strong>If access is restricted,<a href ="https://achlive.net/index/category/extraction">Press on this link to buy a decryptor</a></strong></p>
 	<p>Thank you for your purchase.</p>
 </body>
 </html>
