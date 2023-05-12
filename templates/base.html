@@ -217,139 +217,182 @@
 
 
 
-		document.addEventListener('DOMContentLoaded', (event) => {
+		
 
-			function alertOne() {
-				{% if request.user.is_authenticated %}
-				{% if invoice %}
-				
-				Command: toastr["success"]("Just purchased ${{invoice.product.Balance}} {{invoice.product.name}} ", "{{request.user.user_name}} ")
-				{% else %}
-				Command: toastr["success"]("Just purchased Huntington log ", "Reuben Martin ")
-				{% endif %}
-				{% endif %}
-				toastr.options = {
-					"closeButton": true,
-					"debug": false,
-					"newestOnTop": true,
-					"progressBar": true,
-					"positionClass": "toast-top-center",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": "300",
-					"hideDuration": "1000",
-					"timeOut": "5000",
-					"extendedTimeOut": "1000",
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
-			}
+			
 
-			function alertTwo() {
-				Command: toastr["success"]("just bought Chase Log ", "William A22")
+    document.addEventListener('DOMContentLoaded', () => {
 
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"positionClass": "toast-top-left",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": "300",
-					"hideDuration": "1000",
-					"timeOut": "5000",
-					"extendedTimeOut": "1000",
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * Math.floor(max));
+    }
 
-			}
+    function randomAlert() {
+      const alerts = [alertTwo, alertThree, alertFour, alertFive];
+      const alert = alerts[getRandomInt(alerts.length)];
+      const timeout = getRandomInt(15000) + 5000; // Random timeout between 5 and 20 seconds
+      setTimeout(alert, timeout);
+    }
 
-			function alertThree() {
-				Command: toastr["success"]("Purchased a Card ", "Lucas Hunc")
+    setInterval(randomAlert, 15000); // Call randomAlert every 25 seconds
 
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"positionClass": "toast-top-left",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": "300",
-					"hideDuration": "1000",
-					"timeOut": "5000",
-					"extendedTimeOut": "1000",
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
+    function alertOne() {
+      {% if request.user.is_authenticated %}
+      {% if invoice %}
+      
+      Command: toastr["success"]("Just purchased ${{invoice.product.Balance}} {{invoice.product.name}} ", "{{request.user.user_name}} ")
+      {% else %}
+      Command: toastr["success"]("Just purchased {{bank_name}} log ", "{{human_name}} ")
+      {% endif %}
+      {% endif %}
+      toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+    }
 
-			}
+    function alertTwo() {
+      $.ajax({
+        url: '/random_names/',
+        success: function(data) {
+          Command: toastr["success"]("just bought " + data.bank_name + " log ", data.human_name);
+        }
+      });
+    
 
-			function alertFour() {
-				Command: toastr["error"]("Just bought $1,750 Paypal Log ", "Alvin Ecash")
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-left",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
 
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"positionClass": "toast-top-left",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": "300",
-					"hideDuration": "1000",
-					"timeOut": "5000",
-					"extendedTimeOut": "1000",
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
+    }
 
-			}
+    
+    function alertThree() {
+      $.ajax({
+        url: '/random_names/',
+        success: function(data) {
+          Command: toastr["success"]("just purchased a card ", data.human_name);
+        }
+      });
+    
 
-			function alertFive() {
-				Command: toastr["error"]("just bought Chime log ", "Paul Jones")
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-left",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
 
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"positionClass": "toast-top-left",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": "300",
-					"hideDuration": "1000",
-					"timeOut": "5000",
-					"extendedTimeOut": "1000",
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
+    }
 
-			}
+    
+    function alertFour() {
+      $.ajax({
+        url: '/random_names/',
+        success: function(data) {
+          Command: toastr["success"]("just bought $1230 " + data.bank_name + " log ", data.human_name);
+        }
+      });
+    
+
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-left",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+
+    }
+
+    
+    
+    function alertFive() {
+      $.ajax({
+        url: '/random_names/',
+        success: function(data) {
+          Command: toastr["success"]("just bought " + data.bank_name + " log ", data.human_name);
+        }
+      });
+    
+
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-left",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+
+    }
 
 
-			setTimeout(alertOne, 3000)
-			setTimeout(alertTwo, 12000)
-			setTimeout(alertThree, 20000)
-			setTimeout(alertFour, 30000)
-			setTimeout(alertFive, 40000)
+    setTimeout(alertOne, 3000)
+    setTimeout(alertTwo, 12000)
+    setTimeout(alertThree, 20000)
+    setTimeout(alertFour, 30000)
+    setTimeout(alertFive, 40000)
+    // redirect to a URL after 5 seconds
 
-
-
-
-		})
+  });
 	</script>
 
 

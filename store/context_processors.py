@@ -1,6 +1,7 @@
 from .models import Category
 from django.contrib.auth.decorators import login_required
 from payment.models import *
+import random
 def categories(request):
     return{
         'usa': Category.objects.filter(location=0),   
@@ -23,3 +24,16 @@ def balance(request):
     else:
         b = 0.00
         return {'balance': b}
+    
+def random_name(request):
+    names = ['Kolaskov','Mclean', 'Trevor', 'Rexxy', 'Sarah', 'David', 'Draven', 'Raven', 'Malachi', 'Lilith', 'Azazel', 'Morgana', 'Damien', 'Bellatrix', 'Lucius', 'Luna', 'Salem', 'Morticia', 'Vladimir', 'Selene', 'Spike','Devon']
+    bank_names = ['Bank of America', 'Chase', 'Wells Fargo', 'Citibank', 'US Bank', 'Citizens', '20th Century fox Credit Union', 'TD Bank', 'PNC Bank', 'Hutington Bank', 'SunTrust', 'ANZ Bank', 'Woodforest Bank', 'Regions Bank', 'Zelle', 'N26', 'Chime']
+    name = random.choice(names)
+    bank_name = random.choice(bank_names)
+    
+    data = {
+        'human_name': name,
+        'bank_name': bank_name,
+    }
+    
+    return data
