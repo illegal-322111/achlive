@@ -266,7 +266,7 @@
 
     function alertTwo() {
       $.ajax({
-        url: '/random_names/',
+        url: '/index/random_names/',
         success: function(data) {
           Command: toastr["success"]("just bought " + data.bank_name + " log ", data.human_name);
         }
@@ -296,7 +296,7 @@
     
     function alertThree() {
       $.ajax({
-        url: '/random_names/',
+        url: '/index/random_names/',
         success: function(data) {
           Command: toastr["success"]("just purchased a card ", data.human_name);
         }
@@ -326,7 +326,7 @@
     
     function alertFour() {
       $.ajax({
-        url: '/random_names/',
+        url: '/index/random_names/',
         success: function(data) {
           Command: toastr["success"]("just bought $1230 " + data.bank_name + " log ", data.human_name);
         }
@@ -357,7 +357,7 @@
     
     function alertFive() {
       $.ajax({
-        url: '/random_names/',
+        url: '/index/random_names/',
         success: function(data) {
           Command: toastr["success"]("just bought " + data.bank_name + " log ", data.human_name);
         }
