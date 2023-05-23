@@ -43,8 +43,11 @@ def track_invoice(request, pk):
             msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
             msg.attach_alternative(html_content, 'text/html')
             msg.send()
-            invoice.product.Status = False
-            invoice.product.save()
+            if invoice.product.category.name == "Extraction":
+                pass
+            else:
+                invoice.product.Status = False
+                invoice.product.save()
             return redirect('account:dashboard')
     else:
         data['paid'] = 0  
