@@ -13,9 +13,9 @@ class Command(BaseCommand):
 
         with open(file_path, 'w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Category', 'Name', 'Balance', 'Title', 'Info', 'Slug', 'Price', 'Status', 'Premium', 'PDF'])
+            writer.writerow(['Category', 'Name', 'Balance', 'Title', 'Info', 'Slug', 'Price', 'Status',  'PDF'])
 
             for product in Product.objects.all():
-                writer.writerow([product.category, product.name, product.Balance, product.Title, product.Info, product.slug, product.price, product.Status, product.premium, product.pdf])
+                writer.writerow([product.category, product.name, product.Balance, product.Title, product.Info, product.slug, product.price, product.Status, product.pdf])
 
         self.stdout.write(self.style.SUCCESS('Products exported successfully.'))
