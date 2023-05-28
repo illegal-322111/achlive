@@ -27,7 +27,7 @@ def balance(request):
     
 def random_name(request):
     names = ['Kolaskov','Mclean', 'Trevor', 'Rexxy', 'Sarah', 'David', 'Draven', 'Raven', 'Malachi', 'Lilith', 'Azazel', 'Morgana', 'Damien', 'Bellatrix', 'Lucius', 'Luna', 'Salem', 'Morticia', 'Vladimir', 'Selene', 'Spike','Devon']
-    bank_names = ['Bank of America', 'Chase', 'Wells Fargo', 'Citibank', 'US Bank', 'Citizens', '20th Century fox Credit Union', 'TD Bank', 'PNC Bank', 'Hutington Bank', 'SunTrust', 'ANZ Bank', 'Woodforest Bank', 'Regions Bank', 'Zelle', 'N26', 'Chime']
+    bank_names = ['Bank of America', 'Chase', 'Wells Fargo', 'Citibank', 'US Bank', 'Citizens', 'TD Bank', 'Hutington Bank', 'Woodforest Bank', 'Zelle', 'Chime']
     name = random.choice(names)
     bank_name = random.choice(bank_names)
     
