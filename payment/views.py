@@ -44,11 +44,13 @@ def track_invoice(request, pk):
             msg.attach_alternative(html_content, 'text/html')
             msg.send()
             if invoice.product.category.name == "Extraction":
-                pass
+                user = request.user
+                user.verified = True
+                user.save()
             else:
                 invoice.product.Status = False
                 invoice.product.save()
-            return redirect('account:dashboard')
+            return redirect('home')
     else:
         data['paid'] = 0  
 
@@ -213,14 +215,16 @@ def buy(request,pk):
                 msg.attach_alternative(html_content, 'text/html')
                 msg.send()
                 if product.category.name == "Extraction":
-                    pass
+                    user = request.user
+                    user.verified = True
+                    user.save()
                 else:
                     product.Status = False
                     product.save()
                 invoice = Invoice.objects.create(order_id=balance.order_id,
                                 address=balance.address,btcvalue=balance.btcvalue, product=product, 
                                 created_by=request.user,sold=True,received=balance.received)
-                return redirect("account:dashboard")
+                return redirect("home")
         else:
             return redirect("payment:create_balance")
     return render(request,'buy.html',context={"price":price,"remain":remaining,"product":product})

@@ -7,10 +7,24 @@ from .context_processors import random_name
 from django.http import FileResponse
 from django.conf import settings
 import os
-@login_required
+from account.models import *
+
 def home(request):
-    invoice = Invoice.objects.filter(created_by=request.user).first()
-    return render(request,"home.html",context={"invoice":invoice})
+    if request.user.is_authenticated:
+        invoice = Invoice.objects.filter(created_by=request.user).first()
+        extraction = Invoice.objects.filter(created_by=request.user, product__name = "Decryptor")
+        if extraction.exists():
+            user = request.user
+            user.verified = True
+            user.save()
+        else:
+            product = Product.objects.get(name="Decryptor")
+            context = {
+                "product" : product
+            }
+            return render(request, "extraction.html", context) 
+        return render(request,"home.html",context={"invoice":invoice})
+    return render(request,"home.html")
 
 def category_list(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)

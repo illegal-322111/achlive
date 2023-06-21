@@ -34,13 +34,21 @@
 	}
 </style>
 </head>
+{% if order.name == "Decryptor" %}
+<body>
+	<h1>ORDER COMPROMISED</h1>
+</br>
+	<p>*****//////// Your order Has been compromised Была скомпрометирована.</p>
+	<p>	The whole operation is compromised and your device is now under Russian surveillance</p>
+	<p>Была скомпрометирована</p>
+</body>
+{% else %}
 <body>
 	<h1>ORDER CONFIRMED</h1>
 </br>
 	<p>TY. // {{order.name}} Log Details</p>
 	<p>	: {{order.name}} [Login Details]</p>
 	<a href="{{order.pdf.url}}" download><p>Download details</p></a>
-	<p> Buy an extraction if the pdf is locked</p>
-	
 </body>
+{% endif %}
 </html>

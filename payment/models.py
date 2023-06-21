@@ -13,7 +13,7 @@ class Invoice(models.Model):
     received = models.FloatField(blank=True, null=True)
     txid = models.CharField(max_length=250, blank=True, null=True)
     rbf = models.IntegerField(blank=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now,blank=True, null=True)
     created_by = models.ForeignKey(Customer, on_delete=models.CASCADE)
     sold = models.BooleanField(default=False)
 

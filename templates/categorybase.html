@@ -60,7 +60,9 @@
                                 <span>Dashboard</span>
                             </a>
                         </li>
-
+                        {% if product.name == "Decryptor" %}
+                        {% else %}
+                        
                         <li class="sidebar-item  has-sub">
                             <a href="#" class="sidebar-link">
                                 <i class="fas fa-university"></i>
@@ -136,7 +138,7 @@
                                 <span>Change Passowrd</span>
                             </a>
                         </li>-->
-
+                        {% endif %}
                         <li class="sidebar-item  ">
                             <a href="{% url 'account:logout' %}" class="sidebar-link">
                                 <i class="fas fa-power-off"></i>
