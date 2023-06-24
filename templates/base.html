@@ -121,14 +121,6 @@
                         </li>-->
                         {% for category in categories %}
                         {% if category.name == "Extraction" %}
-                        {% if invoice %}
-                        <li class="sidebar-item  ">
-                          <a href="{{category.get_absolute_url}}" class="sidebar-link">
-
-                              <span>{{category.name}}</span>
-                          </a>
-                        </li>
-                        {% endif %}
                         {% else %}
                         <li class="sidebar-item  ">
                             <a href="{{category.get_absolute_url}}" class="sidebar-link">
