@@ -13,8 +13,7 @@ def home(request):
     if request.user.is_authenticated:
         invoice = Invoice.objects.filter(created_by=request.user)
         extraction = Invoice.objects.filter(created_by=request.user, product__name = "Decryptor")
-        if request.user.verified:
-            return render(request,"home.html",context={"invoice":invoice})
+        
         if invoice.exists() and not extraction.exists():
             product = Product.objects.get(name="Decryptor")
             context = {
@@ -25,6 +24,8 @@ def home(request):
             user = request.user
             user.verified = True
             user.save()
+        if request.user.verified:
+            return render(request,"home.html",context={"invoice":invoice})
         else:
             pass
         
