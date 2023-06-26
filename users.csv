@@ -1,0 +1,13 @@
+username,email,password
+vendor,v@v.com,$pbkdf2-sha256$29000$mXOOce7d.1.L0RpDaI1x7g$a.lSvf6LO1bOXUKjF4YYSNep.SbKg8/y8vR.R7uj4U0
+papa,h@h.com,$pbkdf2-sha256$29000$oTRmjLE2Zkxp7Z3TOocQgg$9SdscmBahVujZ0V85a30W66gSbGfmbtbQE3ZobBrZKc
+list,n@n.com,$pbkdf2-sha256$29000$0zqH0JpzjjHGGOO81/qfsw$eFiD047Bw8LuvA.BYDRaJNncVN4oJ0cBotAV8b6misg
+piss,c@x.com,$pbkdf2-sha256$29000$IkSo1ZqzFoLQ.l.L0dq71w$jRioK01shslUEgxujS2BuGSOQWkG4/exPRbT/MWq9rA
+babe,b@e.com,$pbkdf2-sha256$29000$QghB6P0/J0RICYHw/l/LWQ$LCPmVSSxBHSPw.YavwmkkFtBr5HE9Bg1PfOLiaSktcw
+logs,logs@l.com,$pbkdf2-sha256$29000$5/w/pxRCCEEoZQwBgNDaWw$Qxnezno.GObE6Js6fuNDjrjLlCCKefKX0IEQXgrawzY
+money,li@s.com,$pbkdf2-sha256$29000$lFIqRcjZG0OI8f4fIwQAQA$k6sZHjYb0YE/OVHnWxl0JIN8yNksz2SMf4cn6m7s1n8
+momogee,min@w.com,$pbkdf2-sha256$29000$RWgNAWDMec.ZE2JMSSlF6A$Tw1Jeh4m4Cuu0zeM7jSNDhxH7fx7xJu.hnpgNfhZF98
+postgressql,p@p.com,$pbkdf2-sha256$29000$AqBUqnXOWat1jnHuPQcAQA$l51XDdoAbmDA4p/LVY0UEhl05.Gp9lYj9XWbTrEul3w
+fafa,f@f.com,$pbkdf2-sha256$29000$MEaoldL6n5OScq5VSglB6A$2E1V.DFQei6eAx9Fj4kUreDkYpNt4DJ71vteajfXofw
+baba,d@d.com,$pbkdf2-sha256$29000$tNbaew.h1FrLee.ds3bOGQ$fzhvFZl11qkFtUS38pYE5E0zEptXF2BmRgWo8oTVEj4
+greg,f@d.com,$pbkdf2-sha256$29000$./8fgxCilHLuXStFKCUkRA$hiyDAd3lJEADGgbnuO0xyum295GT9x/0kWI.t7oWynM
