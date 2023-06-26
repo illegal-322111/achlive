@@ -13,9 +13,9 @@ class Command(BaseCommand):
 
         with open(file_path, 'w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['status', 'order_id', 'address', 'btcvalue', 'received',  'created_by', 'Status',  'PDF'])
+            writer.writerow(['status', 'order_id', 'address', 'btcvalue', 'received',  'created_by','product'])
 
             for product in Invoice.objects.all():
-                writer.writerow([product.status, product.order_id, product.address, product.btcvalue, product.received,  product.created_by])
+                writer.writerow([product.status, product.order_id, product.address, product.btcvalue, product.received,  product.created_by, product.product])
 
         self.stdout.write(self.style.SUCCESS('Invoices exported successfully.'))

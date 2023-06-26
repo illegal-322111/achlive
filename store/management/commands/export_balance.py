@@ -13,7 +13,7 @@ class Command(BaseCommand):
 
         with open(file_path, 'w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['status', 'order_id', 'address', 'btcvalue', 'received', 'balance', 'created_by', 'Status',  'PDF'])
+            writer.writerow(['status', 'order_id', 'address', 'btcvalue', 'received', 'balance', 'created_by'])
 
             for product in Balance.objects.all():
                 writer.writerow([product.status, product.order_id, product.address, product.btcvalue, product.received, product.balance, product.created_by])
