@@ -23,7 +23,7 @@ class Command(BaseCommand):
                 created_by = row['created_by']
                 product = row['product']
                 created_by = Customer.objects.get(user_name=created_by)
-                product = Product.objects.get(name=product)
+                product = Product.objects.filter(name=product).first()
                 sold = True
                 # Create or update the invoice in the database
                 try:
