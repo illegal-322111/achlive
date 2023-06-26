@@ -1,7 +1,8 @@
 import csv
 from django.core.management.base import BaseCommand
 from payment.models import Invoice
-
+from account.models import Customer
+from store.models import Product
 class Command(BaseCommand):
     help = 'Import invoices from a CSV file'
 
@@ -20,7 +21,9 @@ class Command(BaseCommand):
                 btcvalue = row['btcvalue']
                 received = row['received']
                 created_by = row['created_by']
-
+                product = row['product']
+                created_by = Customer.objects.get(user_name=created_by)
+                product = Product.objects.get(name=product)
                 # Create or update the invoice in the database
                 Invoice.objects.update_or_create(
                     order_id=order_id,
@@ -29,7 +32,8 @@ class Command(BaseCommand):
                         'address': address,
                         'btcvalue': btcvalue,
                         'received': received,
-                        'created_by': created_by
+                        'created_by': created_by,
+                        'product':product
                     }
                 )
 

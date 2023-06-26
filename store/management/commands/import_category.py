@@ -17,7 +17,7 @@ class Command(BaseCommand):
                 name = row['name']
                 slug = row['slug']
                 location = row['location']
-                number = row['number']
+                
 
                 # Create or update the category in the database
                 Category.objects.update_or_create(
@@ -25,7 +25,6 @@ class Command(BaseCommand):
                     defaults={
                         'name': name,
                         'location': location,
-                        'number': number
                     }
                 )
 

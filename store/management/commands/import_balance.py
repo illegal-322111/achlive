@@ -1,7 +1,7 @@
 import csv
 from django.core.management.base import BaseCommand
 from payment.models import Balance
-
+from account.models import Customer
 class Command(BaseCommand):
     help = 'Import balances from a CSV file'
 
@@ -21,7 +21,7 @@ class Command(BaseCommand):
                 received = row['received']
                 balance = row['balance']
                 created_by = row['created_by']
-
+                created_by = Customer.objects.get(user_name=created_by)
                 # Create or update the balance in the database
                 Balance.objects.update_or_create(
                     order_id=order_id,
