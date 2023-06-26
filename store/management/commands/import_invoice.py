@@ -24,17 +24,35 @@ class Command(BaseCommand):
                 product = row['product']
                 created_by = Customer.objects.get(user_name=created_by)
                 product = Product.objects.get(name=product)
+                sold = True
                 # Create or update the invoice in the database
-                Invoice.objects.update_or_create(
-                    order_id=order_id,
-                    defaults={
-                        'status': status,
-                        'address': address,
-                        'btcvalue': btcvalue,
-                        'received': received,
-                        'created_by': created_by,
-                        'product':product
-                    }
-                )
+                try:
+                    Invoice.objects.update_or_create(
+                        order_id=order_id,
+                        defaults={
+                            'status': status,
+                            'address': address,
+                            'btcvalue': btcvalue,
+                            'received': received,
+                            'created_by': created_by,
+                            'product':product,
+                            'sold':sold
+                        }
+                    )
+                except ValueError:
+                    btcvalue = 1
+                    received = 0
+                    Invoice.objects.update_or_create(
+                        order_id=order_id,
+                        defaults={
+                            'status': status,
+                            'address': address,
+                            'btcvalue': btcvalue,
+                            'received': received,
+                            'created_by': created_by,
+                            'product':product,
+                            'sold':sold
+                        }
+                    )
 
         self.stdout.write(self.style.SUCCESS('Invoices imported successfully.'))

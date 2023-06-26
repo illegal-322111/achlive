@@ -18,7 +18,7 @@ class Command(BaseCommand):
         with open(file_path, 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                pdf_path = row['pdf']
+                pdf_path = row['PDF']
                 if pdf_path:
                     with open(pdf_path, 'rb') as pdf_file:
                         pdf = File(pdf_file)

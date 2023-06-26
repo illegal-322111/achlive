@@ -23,16 +23,31 @@ class Command(BaseCommand):
                 created_by = row['created_by']
                 created_by = Customer.objects.get(user_name=created_by)
                 # Create or update the balance in the database
-                Balance.objects.update_or_create(
-                    order_id=order_id,
-                    defaults={
-                        'status': status,
-                        'address': address,
-                        'btcvalue': btcvalue,
-                        'received': received,
-                        'balance': balance,
-                        'created_by': created_by
-                    }
-                )
+                try:
+                    Balance.objects.update_or_create(
+                        order_id=order_id,
+                        defaults={
+                            'status': status,
+                            'address': address,
+                            'btcvalue': btcvalue,
+                            'received': received,
+                            'balance': balance,
+                            'created_by': created_by
+                        }
+                    )
+                except ValueError:
+                    received = 0
+                    balance = 0
+                    Balance.objects.update_or_create(
+                        order_id=order_id,
+                        defaults={
+                            'status': status,
+                            'address': address,
+                            'btcvalue': btcvalue,
+                            'received': received,
+                            'balance': balance,
+                            'created_by': created_by
+                        }
+                    )
 
         self.stdout.write(self.style.SUCCESS('Balances imported successfully.'))
