@@ -10,15 +10,6 @@
             <input type="text" value="75" name="price" hidden=""><input type="text" value="85" name="price" hidden=""><input type="text" value="100" name="price" hidden=""><input type="text" value="163" name="price" hidden=""><input type="text" value="150" name="price" hidden=""><input type="text" value="210" name="price" hidden=""><input type="text" value="360" name="price" hidden=""><input type="text" value="487" name="price" hidden=""><table class="table table-striped dataTable-table" id="barclays">
                 <thead>
                     <form action="shipping.php" method="post"></form>
-                        <tr>
-                            <th data-sortable="" style="width: 4.69208%;"><a href="#" class="dataTable-sorter text-white">id</a></th>
-                            <th data-sortable="" style="width: 11.7302%;"><a href="#" class="dataTable-sorter text-white">Balance</a></th>
-                            <th data-sortable="" style="width: 26.2463%;"><a href="#" class="dataTable-sorter text-white">Title</a></th>
-                            <th data-sortable="" style="width: 21.9941%;"><a href="#" class="dataTable-sorter text-white">Info</a></th>
-                            <th data-sortable="" style="width: 9.97067%;"><a href="#" class="dataTable-sorter text-white">Price</a></th>
-                            <th data-sortable="" style="width: 15.1026%;"><a href="#" class="dataTable-sorter text-white">Status</a></th>
-                            <th data-sortable="" style="width: 10.2639%;"><a href="#" class="dataTable-sorter text-white">Action</a></th>
-                        </tr>
                         {% if category.name == "Clone cards" %}
                                   <tr>
                                     <th data-sortable="" style="width: 4.69208%;"><a href="#" class="dataTable-sorter text-white">Type</a></th>
@@ -49,8 +40,8 @@
                 <tbody>
                     <form action="#" method="post"></form>
                         <tr>
-                            <td class="text-white">1</td>
-                            <td class="text-white">${{product.Balance}}</td>
+                            <td class="text-white">{% if category.name == "Cards" %}{{product.name}}{% else %}1{% endif %}</td>
+                                        <td class="text-white">{% if category.name == "Clone cards" %}{{product.Balance}}******{% else %}${{product.Balance}}{% endif %}</td>
                             
 
                             <td class="text-white">{{product.Title}}</td>

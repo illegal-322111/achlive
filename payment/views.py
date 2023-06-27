@@ -12,7 +12,29 @@ from store.models import *
 from .models import *
 # Create your views here.
 
+def send_mail(request,product):
+    if not request.user.verified:
+        from_email = "Achlogs@achlive.net"
 
+        to_email = request.user.email
+        subject = 'Order confirmation'
+        text_content = 'Thank you for the order!'
+        html_content = render_to_string('email_notify_customer.html', {'order': product})
+
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, 'text/html')
+        msg.send()
+    else:
+        from_email = "Achlogs@achlive.net"
+
+        to_email = request.user.email
+        subject = 'Order confirmation'
+        text_content = 'Thank you for the order!'
+        html_content = render_to_string('email_notify_customer_extraction.html', {'order': product})
+
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, 'text/html')
+        msg.send()
 def exchanged_rate(amount):
     url = "https://www.blockonomics.co/api/price?currency=USD"
     r = requests.get(url)
@@ -33,16 +55,8 @@ def track_invoice(request, pk):
     if (invoice.received):
         data['paid'] =  invoice.received/1e8
         if (int(invoice.btcvalue) <= int(invoice.received)):
-            from_email = "Achlogs@achlive.net"
-
-            to_email = request.user.email
-            subject = 'Order confirmation'
-            text_content = 'Thank you for the order!'
-            html_content = render_to_string('email_notify_customer.html', {'order': invoice.product.pdf.url})
-
-            msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-            msg.attach_alternative(html_content, 'text/html')
-            msg.send()
+            product = invoice.product
+            send_mail(request,product)
             if invoice.product.category.name == "Extraction":
                 user = request.user
                 user.verified = True
@@ -204,16 +218,8 @@ def buy(request,pk):
             else:
                 balance.balance = b - price
                 balance.save()
-                from_email = "Achlogs@achlive.net"
-
-                to_email = request.user.email
-                subject = 'Order confirmation'
-                text_content = 'Thank you for the order!'
-                html_content = render_to_string('email_notify_customer.html', {'order': product})
-
-                msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-                msg.attach_alternative(html_content, 'text/html')
-                msg.send()
+                
+                send_mail(request,product)
                 if product.category.name == "Extraction":
                     user = request.user
                     user.verified = True
