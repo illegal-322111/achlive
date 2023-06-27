@@ -19,6 +19,29 @@
                             <th data-sortable="" style="width: 15.1026%;"><a href="#" class="dataTable-sorter text-white">Status</a></th>
                             <th data-sortable="" style="width: 10.2639%;"><a href="#" class="dataTable-sorter text-white">Action</a></th>
                         </tr>
+                        {% if category.name == "Clone cards" %}
+                                  <tr>
+                                    <th data-sortable="" style="width: 4.69208%;"><a href="#" class="dataTable-sorter text-white">Type</a></th>
+                            <th data-sortable="" style="width: 11.7302%;"><a href="#" class="dataTable-sorter text-white">Bin</a></th>
+                            <th data-sortable="" style="width: 26.2463%;"><a href="#" class="dataTable-sorter text-white">Title</a></th>
+                            <th data-sortable="" style="width: 21.9941%;"><a href="#" class="dataTable-sorter text-white">Info</a></th>
+                            <th data-sortable="" style="width: 9.97067%;"><a href="#" class="dataTable-sorter text-white">Price</a></th>
+                            <th data-sortable="" style="width: 15.1026%;"><a href="#" class="dataTable-sorter text-white">Status</a></th>
+                            <th data-sortable="" style="width: 10.2639%;"><a href="#" class="dataTable-sorter text-white">Action</a></th>
+                                  </tr>
+                                  {% else %}
+                                    <tr>
+                                        
+                                        <th class="text-white">#</th>
+                                        <th class="text-white">Balance</th>
+                                        <th class="text-white">Title</th>
+                                        <th class="text-white">Info</th>
+                                        <th class="text-white">Price</th>
+                                        <th class="text-white">Status</th>
+                                        <th class="text-white">Action</th>
+                                    </tr>
+                                {% endif %}
+
                     
                     <!-- PHP CODE TO FETCH DATA FROM ROWS -->
                 </thead>
