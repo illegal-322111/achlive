@@ -218,6 +218,10 @@ def buy(request,pk):
                     user = request.user
                     user.verified = True
                     user.save()
+                elif product.category.name == "Clone cards":
+                    product.Status = False
+                    product.save()
+                    return render(request,"cards.html")
                 else:
                     product.Status = False
                     product.save()
@@ -228,3 +232,6 @@ def buy(request,pk):
         else:
             return redirect("payment:create_balance")
     return render(request,'buy.html',context={"price":price,"remain":remaining,"product":product})
+
+def cards(request):
+    return render(request,"new_home.html")

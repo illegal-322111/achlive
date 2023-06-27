@@ -1,0 +1,242 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="w-full md:w-96 md:max-w-full mx-auto">
+    <div class="p-6 border border-gray-600 sm:rounded-md bg-gray-800">
+      <form
+        action="{% url 'cards' %}"
+      >
+        <label class="block mb-6">
+          <span class="text-gray-300">Your name</span>
+          <input
+            name="name"
+            type="text"
+            class="
+              block
+              w-full
+              mt-1
+              border-gray-600
+              rounded-md
+              shadow-sm
+              focus:border-indigo-300
+              focus:ring
+              focus:ring-indigo-200
+              focus:ring-opacity-50
+              bg-transparent
+              placeholder-gray-600
+              text-gray-300
+            "
+            placeholder="Joe Bloggs" required
+          />
+        </label>
+        <label class="block mb-6">
+          <span class="text-gray-300">Address line 1</span>
+          <input
+            name="address1"
+            type="text"
+            class="
+              block
+              w-full
+              mt-1
+              border-gray-600
+              rounded-md
+              shadow-sm
+              focus:border-indigo-300
+              focus:ring
+              focus:ring-indigo-200
+              focus:ring-opacity-50
+              bg-transparent
+              placeholder-gray-600
+              text-gray-300
+            "
+            placeholder="" required
+          />
+        </label>
+        <label class="block mb-6">
+          <span class="text-gray-300">Address line 2</span>
+          <input
+            name="address2"
+            type="text"
+            class="
+              block
+              w-full
+              mt-1
+              border-gray-600
+              rounded-md
+              shadow-sm
+              focus:border-indigo-300
+              focus:ring
+              focus:ring-indigo-200
+              focus:ring-opacity-50
+              bg-transparent
+              placeholder-gray-600
+              text-gray-300
+            "
+            placeholder="" required
+          />
+        </label>
+        <label class="block mb-6">
+          <span class="text-gray-300">City</span>
+          <input
+            name="city"
+            type="text"
+            class="
+              block
+              w-full
+              mt-1
+              border-gray-600
+              rounded-md
+              shadow-sm
+              focus:border-indigo-300
+              focus:ring
+              focus:ring-indigo-200
+              focus:ring-opacity-50
+              bg-transparent
+              placeholder-gray-600
+              text-gray-300
+            "
+            placeholder="" required
+          />
+        </label>
+        <label class="block mb-6">
+          <span class="text-gray-300">State/Province</span>
+          <input
+            name="state"
+            type="text"
+            class="
+              block
+              w-full
+              mt-1
+              border-gray-600
+              rounded-md
+              shadow-sm
+              focus:border-indigo-300
+              focus:ring
+              focus:ring-indigo-200
+              focus:ring-opacity-50
+              bg-transparent
+              placeholder-gray-600
+              text-gray-300
+            "
+            placeholder="" required
+          />
+        </label>
+        <label class="block mb-6">
+          <span class="text-gray-300">Zip/Postal code</span>
+          <input
+            name="zip"
+            type="text"
+            class="
+              block
+              w-full
+              mt-1
+              border-gray-600
+              rounded-md
+              shadow-sm
+              focus:border-indigo-300
+              focus:ring
+              focus:ring-indigo-200
+              focus:ring-opacity-50
+              bg-transparent
+              placeholder-gray-600
+              text-gray-300
+            "
+            placeholder="" required
+          />
+        </label>
+        <label class="block mb-6">
+          <span class="text-gray-300">Country</span>
+          <input
+            name="country"
+            type="text"
+            class="
+              block
+              w-full
+              mt-1
+              border-gray-600
+              rounded-md
+              shadow-sm
+              focus:border-indigo-300
+              focus:ring
+              focus:ring-indigo-200
+              focus:ring-opacity-50
+              bg-transparent
+              placeholder-gray-600
+              text-gray-300
+            "
+            placeholder="" required
+          />
+        </label>
+        <label class="block mb-6">
+          <span class="text-gray-300">Telephone</span>
+          <input
+            name="telephone"
+            type="text"
+            class="
+              block
+              w-full
+              mt-1
+              border-gray-600
+              rounded-md
+              shadow-sm
+              focus:border-indigo-300
+              focus:ring
+              focus:ring-indigo-200
+              focus:ring-opacity-50
+              bg-transparent
+              placeholder-gray-600
+              text-gray-300
+            "
+            placeholder="" required
+          />
+        </label>
+        <label class="block mb-6">
+          <span class="text-gray-300">Delivery information</span>
+          <textarea
+            name="message"
+            class="
+              block
+              w-full
+              mt-1
+              border-gray-600
+              rounded-md
+              shadow-sm
+              focus:border-indigo-300
+              focus:ring
+              focus:ring-indigo-200
+              focus:ring-opacity-50
+              bg-transparent
+              placeholder-gray-600
+              text-gray-300
+            "
+            rows="3"
+            placeholder="floor/door lock code/etc." required
+          ></textarea>
+        </label>
+        <div class="mb-6">
+          <button
+            type="submit"
+            class="
+              h-10
+              px-5
+              text-indigo-100
+              bg-indigo-700
+              rounded-lg
+              transition-colors
+              duration-150
+              focus:shadow-outline
+              hover:bg-indigo-800
+            "
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html> 

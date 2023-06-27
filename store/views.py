@@ -8,7 +8,7 @@ from django.http import FileResponse
 from django.conf import settings
 import os
 from account.models import *
-
+@login_required
 def home(request):
     if request.user.is_authenticated:
         invoice = Invoice.objects.filter(created_by=request.user)
@@ -110,3 +110,6 @@ def download_category(request):
         return response
     else:
         return HttpResponse('File not found.')
+    
+def new_home(request):
+    return render(request,"new_home.html")

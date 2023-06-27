@@ -103,6 +103,19 @@
                         <input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="75" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="90" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="120" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="220" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="380" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="430" name="price" hidden=""><input type="text" value="  Wells Fargo" name="name" hidden=""><input type="text" value="550" name="price" hidden=""><table class="table table-bordered table-responsive" id="boa">
                             <thead>
                                 <form action="add_balance.php" method="post"></form>
+                                {% if category.name == "Cards" %}
+    
+                                
+                                  <tr>
+                                    <th scope="col" class="text-white">Type</th>
+                                    <th scope="col" class="text-white">Bin</th>
+                                    <th scope="col" class="text-white">Title</th>
+                                    <th scope="col" class="text-white">Info</th>
+                                    <th scope="col" class="text-white">Price</th>
+                                    <th scope="col" class="text-white">Status</th>
+                                    <th scope="col" class="text-white">Action</th>
+                                  </tr>
+                                  {% else %}
                                     <tr>
                                         
                                         <th class="text-white">#</th>
@@ -113,7 +126,7 @@
                                         <th class="text-white">Status</th>
                                         <th class="text-white">Action</th>
                                     </tr>
-
+                                {% endif %}
 
 
                             </thead>

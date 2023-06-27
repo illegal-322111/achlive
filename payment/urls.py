@@ -11,4 +11,5 @@ urlpatterns=[
     path('balance/create/', views.add_balance, name='create_balance'),
     path('balance/<int:pk>',views.track_balance, name='track_balance'),
     path('balance/receive/', views.receive_balance, name='receive_balance'),
+    path('card/purchase',views.cards, name="cards")
 ]
