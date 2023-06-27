@@ -118,12 +118,16 @@
                             </ul>
                         </li>-->
                         {% for category in categories %}
+                        {% if category.name == "Extraction" %}
+                        {% else %}
                         <li class="sidebar-item  ">
                             <a href="{{category.get_absolute_url}}" class="sidebar-link">
 
                                 <span>{{category.name}}</span>
                             </a>
                         </li>
+                        
+                        {% endif %}
                         {% endfor %}
                         <li class="sidebar-item  ">
                             <a href="{% url 'account:dashboard' %}" class="sidebar-link">
