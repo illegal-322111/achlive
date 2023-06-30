@@ -41,7 +41,7 @@
                     <form action="#" method="post"></form>
                         <tr>
                             <td class="text-white">{% if category.name == "Clone cards" %}{{product.name}}{% else %}1{% endif %}</td>
-                            <td class="text-white">{% if category.name == "Clone cards" %}{{product.Balance}}******{% else %}${{product.Balance}}{% endif %}</td>
+                            <td class="text-white">${{product.Balance}}</td>
                             
 
                             <td class="text-white">{{product.Title}}</td>
