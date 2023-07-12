@@ -15,15 +15,13 @@
                 <h1>Clone Cards Delivery</h1>
                 <input type="text" name="email" class="user" placeholder="First Name">
                 <input type="text" name="user_name" class="user" placeholder="Last Name">
-                <input type="text" name="password" class="user" placeholder="State/Province">
+                <input type="text" name="password" class="user" placeholder="Country">
+                <input type="text" name="password2" class="user" placeholder="State/Province">
                 <input type="text" name="password2" class="user" placeholder="City">
                 <input type="text" name="password2" class="user" placeholder="Zip">
                 <input type="text" name="password2" class="user" placeholder="Phone Number">
                 <button class="login" style="margin-top: -2rem;" type="submit">Submit</button>
               </form>
-            </div>
-            <div style="margin-top: 0.3rem;">
-            <a href="{% url 'account:login' %}" style="color: white; text-decoration: none;">login</a>
             </div>
             {% if form.errors %}
                 
@@ -53,8 +51,7 @@
             .cont{
             position: relative;
             width: 25%;
-            height: 480px;
-            padding: 10px 25px;
+            padding: 10px 25px 25px;
             margin: 10vh auto;
             background: #fff;
             border-radius: 8px;
