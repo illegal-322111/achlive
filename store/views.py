@@ -12,24 +12,8 @@ from account.models import *
 def home(request):
     if request.user.is_authenticated:
         invoice = Invoice.objects.filter(created_by=request.user)
-        extraction = Invoice.objects.filter(created_by=request.user, product__name = "Decryptor")
-        if request.user.verified:
-            return render(request,"home.html",context={"invoice":invoice})
-        
-        if extraction.exists():
-            user = request.user
-            user.verified = True
-            user.save()
-            return render(request,"home.html",context={"invoice":invoice})
-        elif invoice.exists() and not extraction.exists():
-            product = Product.objects.get(name="Decryptor")
-            context = {
-                "product" : product
-            }
-            return render(request, "extraction.html", context)
-        else:
-            pass
         return render(request,"home.html",context={"invoice":invoice})
+    
     return render(request,"home.html")
 
 def category_list(request, category_slug):
