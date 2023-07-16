@@ -1,6 +1,7 @@
 from django.shortcuts import render,reverse,redirect
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseBadRequest
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 import datetime
@@ -40,7 +41,7 @@ def exchanged_rate(amount):
     r = requests.get(url)
     response = r.json()
     return amount/response['price']
-
+@login_required
 def track_invoice(request, pk):
     invoice_id = pk
     invoice = Invoice.objects.get(id=invoice_id)
@@ -69,7 +70,7 @@ def track_invoice(request, pk):
         data['paid'] = 0  
 
     return render(request,'invoice.html',context=data)
-
+@login_required
 def create_payment(request, pk):
     
     product_id = pk
@@ -87,7 +88,7 @@ def create_payment(request, pk):
     else:
         print(r.status_code, r.text)
         return HttpResponse("Some Error, Try Again!")
-    
+@login_required 
 def receive_payment(request):
     
     if (request.method != 'GET'):
@@ -111,6 +112,7 @@ def receive_payment(request):
 
 
 #User balance codes
+@login_required
 def add_balance(request):
     api_key = 'ZLHYiSkDEHzZFHHtgWmUvyODD3wA9H67PDgjjzjnFV4'
     amount = float(1.00)
@@ -139,7 +141,7 @@ def add_balance(request):
     else:
         print(r.status_code, r.text)
         return HttpResponse("Some Error, Try Again!")
-
+@login_required
 def track_balance(request, pk):
     invoice_id = pk
     invoice = Balance.objects.get(id=invoice_id)
@@ -161,7 +163,7 @@ def track_balance(request, pk):
          data['paid'] = 0  
 
     return render(request,'invoice.html',context=data)
-
+@login_required
 def receive_balance(request):
     if request.method == 'GET':
         txid = request.GET.get('txid')
@@ -191,6 +193,7 @@ def receive_balance(request):
         return HttpResponseBadRequest()
 
 #Buying
+@login_required
 def buy(request,pk):
     product_id = pk
     product = Product.objects.get(id=product_id)

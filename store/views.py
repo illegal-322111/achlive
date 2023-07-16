@@ -15,7 +15,7 @@ def home(request):
         return render(request,"home.html",context={"invoice":invoice})
     
     return render(request,"home.html")
-
+@login_required
 def category_list(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     products = Product.objects.filter(category=category)
