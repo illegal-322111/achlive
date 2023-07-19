@@ -336,11 +336,7 @@ def coinbase_webhook(request):
         return HttpResponseBadRequest()
 
     # Verify the Referer header
-    referer = request.headers.get('Referer')
-    expected_referer = 'https://achlive.net/pay/verify/'
-    print(referer)
-    if referer != expected_referer:
-        return HttpResponseForbidden()
+    
 
     # Process the webhook event
     try:
