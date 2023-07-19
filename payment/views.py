@@ -365,7 +365,8 @@ def coinbase_webhook(request):
                 else:
                     invoice.product.Status = False
                     invoice.product.save()
-                return redirect('home')
+                    redirect('home')
+                    return HttpResponse(status=200)
             except Invoice.DoesNotExist:
                 return HttpResponse("Something went wrong contact chat support")
             
