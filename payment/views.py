@@ -1,5 +1,5 @@
 from django.shortcuts import render,reverse,redirect
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseBadRequest
+from django.http import HttpResponse,HttpResponseRedirect,HttpResponseBadRequest,HttpResponseForbidden
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
@@ -317,7 +317,6 @@ def check_payment_status(request, payment_id):
 
 
 
-
 def coinbase_webhook(request):
     # Verify the request method
     if request.method != 'POST':
@@ -336,10 +335,17 @@ def coinbase_webhook(request):
     if not is_valid_signature:
         return HttpResponseBadRequest()
 
+    # Verify the Referer header
+    referer = request.headers.get('Referer')
+    expected_referer = 'https://achlive.net/pay/verify/'
+    print(referer)
+    if referer != expected_referer:
+        return HttpResponseForbidden()
+
     # Process the webhook event
     try:
-        payload_data = json.loads(payload)
-        event_type = payload_data['event']['type']
+        payload = json.loads(request.body)
+        event_type = payload['event']['type']
 
         if event_type == 'charge:confirmed':
             # Payment confirmed logic
@@ -361,9 +367,10 @@ def coinbase_webhook(request):
 
         return HttpResponse(status=200)
 
-    except (KeyError, ValueError):
+    except (KeyError, ValueError) as e:
         # Invalid payload format
         return HttpResponseBadRequest()
+
 
 def verify_signature(payload, sig_header):
     secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
@@ -373,18 +380,15 @@ def verify_signature(payload, sig_header):
 
     expected_sig = compute_signature(payload, secret)
 
-    if not secure_compare(expected_sig, sig_header):
-        return False
+    return secure_compare(expected_sig, sig_header)
 
-    # Signature verification successful
-    return True
 
 def compute_signature(payload, secret):
-    secret_bytes = codecs.encode(secret, 'utf-8')
-    payload_bytes = codecs.encode(payload, 'utf-8')
+    secret_bytes = secret.encode('utf-8')
+    payload_bytes = payload.encode('utf-8')
     signature = hmac.new(secret_bytes, payload_bytes, hashlib.sha256).hexdigest()
     return signature
 
+
 def secure_compare(sig1, sig2):
     return hmac.compare_digest(sig1, sig2)
-
