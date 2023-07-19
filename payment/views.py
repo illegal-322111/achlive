@@ -388,8 +388,12 @@ def verify_signature(payload, sig_header):
 
 
 def compute_signature(payload, secret):
-    signature = hmac.new(secret, payload, hashlib.sha256).hexdigest()
+    secret_bytes = bytes(secret, 'utf-8')
+    signature = hmac.new(secret_bytes, payload, hashlib.sha256).hexdigest()
     return signature
+
+
+
 
 
 
