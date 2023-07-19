@@ -4,15 +4,17 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-import datetime
-import json
 import requests
 import uuid
-import os
+import random
+import string
 from store.models import *
 from .models import *
 # Create your views here.
-
+def generate_unique_code():
+    # Generate a random alphanumeric code of length 10
+    code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+    return code
 def send_mail(request,product):
     if not request.user.verified:
         from_email = "Achlogs@achlive.net"
@@ -244,3 +246,146 @@ def buy(request,pk):
 
 def cards(request):
     return render(request,"new_home.html")
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def create_coinbase_payment(request,pk):
+    # Generate a unique payment code or ID for tracking purposes
+    payment_code = generate_unique_code()
+    product = Product.objects.get(id=pk)
+    # Construct the payload with necessary information
+    payload = {
+        'name': 'Achlive Pay',
+        'description': f'Payment for {product.name}',
+        'pricing_type': 'fixed_price',
+        'local_price': {
+            'amount': product.price,
+            'currency': 'USD'
+        },
+        'metadata': {
+            'payment_code': payment_code
+        }
+    }
+
+    # Make a POST request to create a new payment
+    response = requests.post(
+        'https://api.commerce.coinbase.com/charges',
+        json=payload,
+        headers={
+            'Content-Type': 'application/json',
+            'X-CC-Api-Key': settings.COINBASE_COMMERCE_API_KEY,
+            'X-CC-Version': '2018-03-22'
+        }
+    )
+
+    # Retrieve the charge object from the response
+    url = response.json().get('data').get('hosted_url')
+    txid = response.json().get('data').get('code')
+    if url:
+        address = "some address"
+        bits = exchanged_rate(product.price)
+        order_id = uuid.uuid1()
+        invoice = Invoice.objects.create(order_id=order_id,
+                                address=address,btcvalue=bits*1e8, product=product,txid=txid, created_by=request.user)
+    # Save the payment code and charge object in your database or session for future reference
+
+    return redirect(url)
+
+def check_payment_status(request, payment_id):
+    # Retrieve the payment code and payment ID from your database or session
+
+    # Make a GET request to check the payment status
+    response = requests.get(
+        f'https://api.commerce.coinbase.com/charges/{payment_id}',
+        headers={
+            'Content-Type': 'application/json',
+            'X-CC-Api-Key': settings.COINBASE_COMMERCE_API_KEY,
+            'X-CC-Version': '2018-03-22'
+        }
+    )
+
+    # Retrieve the payment status from the response
+    payment_status = response.json().get('data').get('timeline')[0].get('status')
+
+    return HttpResponse("Worked")
+
+import json
+from django.http import HttpResponseBadRequest, HttpResponse
+
+def coinbase_webhook(request):
+    # Verify the request method
+    if request.method != 'POST':
+        return HttpResponseBadRequest()
+
+    # Verify the request's content type
+    content_type = request.headers.get('Content-Type')
+    if content_type != 'application/json':
+        return HttpResponseBadRequest()
+
+    # Verify the Coinbase Commerce webhook signature
+    sig_header = request.headers.get('X-CC-Webhook-Signature')
+    payload = json.loads(request.body)
+    is_valid_signature = verify_signature(request,payload,sig_header)
+
+    if not is_valid_signature:
+        return HttpResponseBadRequest()
+
+    # Process the webhook event
+    try:
+        payload = json.loads(request.body)
+        event_type = payload['event']['type']
+
+        if event_type == 'charge:confirmed':
+            return HttpResponse("Worked")
+            # Payment confirmed logic
+            # Retrieve relevant information from the payload and update your system accordingly
+            # For example, you can update the payment status in your database
+
+        elif event_type == 'charge:failed':
+            # Payment failed logic
+            # Handle the failed payment event
+            return HttpResponse("failed")
+        elif event_type == 'charge:pending':
+            # Payment pending logic
+            # Handle the pending payment event
+            return HttpResponse("pending")
+
+        # Handle other event types if needed
+        else:
+            pass
+
+        return HttpResponse(status=200)
+
+    except (KeyError, ValueError) as e:
+        # Invalid payload format
+        return HttpResponseBadRequest()
+
+import hmac
+import hashlib
+import codecs
+from django.http import HttpResponseBadRequest
+
+def verify_signature(request, payload, sig_header):
+    secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
+
+    if not all([payload, sig_header, secret]):
+        return HttpResponseBadRequest("Missing payload, signature, or secret")
+
+    expected_sig = compute_signature(payload, secret)
+
+    if not secure_compare(expected_sig, sig_header):
+        return HttpResponseBadRequest("Signatures do not match")
+
+    # Signature verification successful
+    return HttpResponse(status=200)
+
+def compute_signature(payload, secret):
+    secret_bytes = codecs.encode(secret, 'utf-8')
+    payload_bytes = codecs.encode(payload, 'utf-8')
+    signature = hmac.new(secret_bytes, payload_bytes, hashlib.sha256).hexdigest()
+    return signature
+
+def secure_compare(sig1, sig2):
+    return hmac.compare_digest(sig1, sig2)
+

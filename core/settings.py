@@ -132,7 +132,7 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'account:login'
 
 
-
+COINBASE_COMMERCE_API_KEY = '77c13c31-17be-45f4-a9c2-ce12434c7ad4'
 API_KEY = "ZLHYiSkDEHzZFHHtgWmUvyODD3wA9H67PDgjjzjnFV4"
 
 # Default primary key field type
