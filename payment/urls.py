@@ -13,5 +13,5 @@ urlpatterns=[
     path('balance/receive/', views.receive_balance, name='receive_balance'),
     path('card/purchase',views.cards, name="cards"),
     path('coinbase/<pk>', views.create_coinbase_payment, name="coinbase"),
-    path('coinbase/verify', views.coinbase_webhook, name="coinbase_check"),
+    path('verify', views.coinbase_webhook, name="coinbase_check"),
 ]

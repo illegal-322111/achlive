@@ -4,6 +4,10 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+import hmac
+import hashlib
+import codecs
+from django.http import HttpResponseBadRequest
 import requests
 import uuid
 import random
@@ -361,10 +365,7 @@ def coinbase_webhook(request):
         # Invalid payload format
         return HttpResponseBadRequest()
 
-import hmac
-import hashlib
-import codecs
-from django.http import HttpResponseBadRequest
+
 
 def verify_signature(request, payload, sig_header):
     secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
