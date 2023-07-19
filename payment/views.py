@@ -380,14 +380,17 @@ def verify_signature(payload, sig_header):
 
     expected_sig = compute_signature(payload, secret)
 
-    return secure_compare(expected_sig, sig_header)
+    if not secure_compare(expected_sig, sig_header):
+        return False
+
+    # Signature verification successful
+    return True
 
 
 def compute_signature(payload, secret):
-    secret_bytes = secret.encode('utf-8')
-    payload_bytes = payload.encode('utf-8')
-    signature = hmac.new(secret_bytes, payload_bytes, hashlib.sha256).hexdigest()
+    signature = hmac.new(secret, payload, hashlib.sha256).hexdigest()
     return signature
+
 
 
 def secure_compare(sig1, sig2):
