@@ -12,6 +12,7 @@ import requests
 import uuid
 import random
 import string
+import json
 from store.models import *
 from .models import *
 # Create your views here.
@@ -314,12 +315,13 @@ def check_payment_status(request, payment_id):
 
     return HttpResponse("Worked")
 
-import json
-from django.http import HttpResponseBadRequest, HttpResponse
+
+
 
 def coinbase_webhook(request):
     # Verify the request method
-    
+    if request.method != 'POST':
+        return HttpResponseBadRequest()
 
     # Verify the request's content type
     content_type = request.headers.get('Content-Type')
@@ -328,57 +330,54 @@ def coinbase_webhook(request):
 
     # Verify the Coinbase Commerce webhook signature
     sig_header = request.headers.get('X-CC-Webhook-Signature')
-    payload = json.loads(request.body)
-    is_valid_signature = verify_signature(request,payload,sig_header)
+    payload = request.body
+    is_valid_signature = verify_signature(payload, sig_header)
 
     if not is_valid_signature:
         return HttpResponseBadRequest()
 
     # Process the webhook event
     try:
-        payload = json.loads(request.body)
-        event_type = payload['event']['type']
+        payload_data = json.loads(payload)
+        event_type = payload_data['event']['type']
 
         if event_type == 'charge:confirmed':
-            return HttpResponse("Worked")
             # Payment confirmed logic
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
+            return HttpResponse("Worked")
 
         elif event_type == 'charge:failed':
             # Payment failed logic
             # Handle the failed payment event
             return HttpResponse("failed")
+
         elif event_type == 'charge:pending':
             # Payment pending logic
             # Handle the pending payment event
             return HttpResponse("pending")
 
         # Handle other event types if needed
-        else:
-            pass
 
         return HttpResponse(status=200)
 
-    except (KeyError, ValueError) as e:
+    except (KeyError, ValueError):
         # Invalid payload format
         return HttpResponseBadRequest()
 
-
-
-def verify_signature(request, payload, sig_header):
+def verify_signature(payload, sig_header):
     secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
 
     if not all([payload, sig_header, secret]):
-        return HttpResponseBadRequest("Missing payload, signature, or secret")
+        return False
 
     expected_sig = compute_signature(payload, secret)
 
     if not secure_compare(expected_sig, sig_header):
-        return HttpResponseBadRequest("Signatures do not match")
+        return False
 
     # Signature verification successful
-    return HttpResponse(status=200)
+    return True
 
 def compute_signature(payload, secret):
     secret_bytes = codecs.encode(secret, 'utf-8')
