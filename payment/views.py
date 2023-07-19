@@ -316,7 +316,7 @@ def check_payment_status(request, payment_id):
     return HttpResponse("Worked")
 
 
-
+@csrf_exempt
 def coinbase_webhook(request):
     # Verify the request method
     if request.method != 'POST':
