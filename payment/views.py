@@ -319,8 +319,7 @@ from django.http import HttpResponseBadRequest, HttpResponse
 
 def coinbase_webhook(request):
     # Verify the request method
-    if request.method != 'POST':
-        return HttpResponseBadRequest()
+    
 
     # Verify the request's content type
     content_type = request.headers.get('Content-Type')
