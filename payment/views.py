@@ -15,6 +15,7 @@ import string
 import json
 from store.models import *
 from .models import *
+from django.contrib.sessions.backends.db import SessionStore
 # Create your views here.
 def generate_unique_code():
     # Generate a random alphanumeric code of length 10
@@ -293,6 +294,10 @@ def create_coinbase_payment(request,pk):
         order_id = uuid.uuid1()
         invoice = Invoice.objects.create(order_id=order_id,
                                 address=address,btcvalue=bits*1e8, product=product,txid=txid, created_by=request.user)
+        
+        session = SessionStore(request.session.session_key)
+        session['invoice_id'] = invoice.id
+        session.save()
     # Save the payment code and charge object in your database or session for future reference
 
     return redirect(url)
@@ -347,12 +352,28 @@ def coinbase_webhook(request):
             # Payment confirmed logic
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
-            return HttpResponse("Worked")
+            try:
+                invoice = Invoice.objects.get(id=request.session['invoice_id'])
+                invoice.sold = True
+                invoice.save()
+                product = invoice.product
+                send_mail(request,product)
+                if invoice.product.category.name == "Extraction":
+                    user = request.user
+                    user.verified = True
+                    user.save()
+                else:
+                    invoice.product.Status = False
+                    invoice.product.save()
+                return redirect('home')
+            except Invoice.DoesNotExist:
+                return HttpResponse("Something went wrong contact chat support")
+            
 
         elif event_type == 'charge:failed':
             # Payment failed logic
             # Handle the failed payment event
-            return HttpResponse("failed")
+            return HttpResponse("Payment Failed")
 
         elif event_type == 'charge:pending':
             # Payment pending logic
