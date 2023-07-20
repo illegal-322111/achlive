@@ -302,7 +302,12 @@ def create_coinbase_payment(request,pk):
 
     return redirect(url)
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def check_payment_status(request):
+    logger.debug('Entering check_payment_status()')
     # Retrieve the payment code and payment ID from your database or session
 
     try:
@@ -310,9 +315,12 @@ def check_payment_status(request):
         product = invoice.balance
         product = 2000000000
         invoice.save()
+        logger.debug('Updated invoice successfully')
     except Invoice.DoesNotExist:
+        logger.error('Invoice does not exist')
         return HttpResponse("Something went wrong contact chat support")
     return HttpResponse("Worked")
+
 
 
 @csrf_exempt
@@ -346,6 +354,7 @@ def coinbase_webhook(request):
             # Payment confirmed logic
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
+            logger.debug('Entering check_payment_status()')
             check_payment_status(request)
             return HttpResponse("Check database")
             
@@ -388,10 +397,6 @@ def compute_signature(payload, secret):
     secret_bytes = bytes(secret, 'utf-8')
     signature = hmac.new(secret_bytes, payload, hashlib.sha256).hexdigest()
     return signature
-
-
-
-
 
 
 def secure_compare(sig1, sig2):
