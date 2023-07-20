@@ -263,10 +263,9 @@ def create_coinbase_payment(request,pk):
     # Construct the payload with necessary information
     payload = {
         'name': 'Achlive Pay',
-        'description': f'Payment for {product.name}',
-        'pricing_type': 'fixed_price',
+        'description': f'{request.user.user_name} Balance Topup',
+        'pricing_type': 'no_price',
         'local_price': {
-            'amount': product.price,
             'currency': 'USD'
         },
         'metadata': {
@@ -289,15 +288,20 @@ def create_coinbase_payment(request,pk):
     url = response.json().get('data').get('hosted_url')
     txid = response.json().get('data').get('code')
     if url:
-        address = "some address"
-        bits = exchanged_rate(product.price)
+        address = 'some address'
+        bits = exchanged_rate(2000)
         order_id = uuid.uuid1()
-        invoice = Balance.objects.create(order_id=order_id,
+        # Check if the user already has a balance model
+        balance = Balance.objects.filter(created_by=request.user).first()
+        if balance:
+            # If the user has a balance model, use its id
+            balance.address = address
+            balance.received = 0
+            balance.save()
+        else:
+            # Otherwise, create a new balance model
+            invoice = Balance.objects.create(order_id=order_id,
                                 address=address,btcvalue=bits*1e8,txid=txid, created_by=request.user)
-        
-        session = SessionStore(request.session.session_key)
-        session['invoice_id'] = invoice.id
-        session.save()
     # Save the payment code and charge object in your database or session for future reference
 
     return redirect(url)
@@ -306,20 +310,20 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def check_payment_status(request):
+def check_payment_status(request, payment_code, amount):
     logger.debug('Entering check_payment_status()')
     # Retrieve the payment code and payment ID from your database or session
 
     try:
-        invoice = Balance.objects.get(id=request.session['invoice_id'])
-        product = invoice.balance
-        product = 2000000000
+        invoice = Balance.objects.get(txid=payment_code)
+        invoice.balance += amount
         invoice.save()
         logger.debug('Updated invoice successfully')
+        return redirect('home')
     except Invoice.DoesNotExist:
         logger.error('Invoice does not exist')
         return HttpResponse("Something went wrong contact chat support")
-    return HttpResponse("Worked")
+
 
 
 
@@ -354,9 +358,12 @@ def coinbase_webhook(request):
             # Payment confirmed logic
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
+            payment_code = payload['event']['data']['metadata']['payment_code']
+            amount = payload['event']['data']['payments'][0]['value']['local']['amount']
             logger.debug('Entering check_payment_status()')
-            check_payment_status(request)
-            return HttpResponse("Check database")
+            check_payment_status(request, payment_code, amount)
+            return redirect('home')
+
             
 
         elif event_type == 'charge:failed':
