@@ -292,8 +292,8 @@ def create_coinbase_payment(request,pk):
         address = "some address"
         bits = exchanged_rate(product.price)
         order_id = uuid.uuid1()
-        invoice = Invoice.objects.create(order_id=order_id,
-                                address=address,btcvalue=bits*1e8, product=product,txid=txid, created_by=request.user)
+        invoice = Balance.objects.create(order_id=order_id,
+                                address=address,btcvalue=bits*1e8,txid=txid, created_by=request.user)
         
         session = SessionStore(request.session.session_key)
         session['invoice_id'] = invoice.id
@@ -306,19 +306,10 @@ def check_payment_status(request):
     # Retrieve the payment code and payment ID from your database or session
 
     try:
-        invoice = Invoice.objects.get(id=request.session['invoice_id'])
-        invoice.sold = True
+        invoice = Balance.objects.get(id=request.session['invoice_id'])
+        product = invoice.balance
+        product = 2000000000
         invoice.save()
-        product = invoice.product
-        send_mail(request,product)
-        if invoice.product.category.name == "Extraction":
-            user = request.user
-            user.verified = True
-            user.save()
-        else:
-            invoice.product.Status = False
-            invoice.product.save()
-            return HttpResponse(status=200)
     except Invoice.DoesNotExist:
         return HttpResponse("Something went wrong contact chat support")
     return HttpResponse("Worked")
