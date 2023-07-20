@@ -256,18 +256,15 @@ def cards(request):
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
-def create_coinbase_payment(request,pk):
+def create_coinbase_payment(request):
     # Generate a unique payment code or ID for tracking purposes
     payment_code = generate_unique_code()
-    product = Product.objects.get(id=pk)
+
     # Construct the payload with necessary information
     payload = {
         'name': 'Achlive Pay',
-        'description': f'{request.user.user_name} Balance Topup',
+        'description': 'Balance Topup',
         'pricing_type': 'no_price',
-        'local_price': {
-            'currency': 'USD'
-        },
         'metadata': {
             'payment_code': payment_code
         }
@@ -359,6 +356,7 @@ def coinbase_webhook(request):
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
             payment_code = payload['event']['data']['metadata']['payment_code']
+            print(payment_code)
             amount = payload['event']['data']['payments'][0]['value']['local']['amount']
             logger.debug('Entering check_payment_status()')
             check_payment_status(request, payment_code, amount)
