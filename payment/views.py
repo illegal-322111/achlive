@@ -302,22 +302,25 @@ def create_coinbase_payment(request,pk):
 
     return redirect(url)
 
-def check_payment_status(request, payment_id):
+def check_payment_status(request):
     # Retrieve the payment code and payment ID from your database or session
 
-    # Make a GET request to check the payment status
-    response = requests.get(
-        f'https://api.commerce.coinbase.com/charges/{payment_id}',
-        headers={
-            'Content-Type': 'application/json',
-            'X-CC-Api-Key': settings.COINBASE_COMMERCE_API_KEY,
-            'X-CC-Version': '2018-03-22'
-        }
-    )
-
-    # Retrieve the payment status from the response
-    payment_status = response.json().get('data').get('timeline')[0].get('status')
-
+    try:
+        invoice = Invoice.objects.get(id=request.session['invoice_id'])
+        invoice.sold = True
+        invoice.save()
+        product = invoice.product
+        send_mail(request,product)
+        if invoice.product.category.name == "Extraction":
+            user = request.user
+            user.verified = True
+            user.save()
+        else:
+            invoice.product.Status = False
+            invoice.product.save()
+            return HttpResponse(status=200)
+    except Invoice.DoesNotExist:
+        return HttpResponse("Something went wrong contact chat support")
     return HttpResponse("Worked")
 
 
@@ -352,23 +355,8 @@ def coinbase_webhook(request):
             # Payment confirmed logic
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
-            try:
-                invoice = Invoice.objects.get(id=request.session['invoice_id'])
-                invoice.sold = True
-                invoice.save()
-                product = invoice.product
-                send_mail(request,product)
-                if invoice.product.category.name == "Extraction":
-                    user = request.user
-                    user.verified = True
-                    user.save()
-                else:
-                    invoice.product.Status = False
-                    invoice.product.save()
-                    redirect('home')
-                    return HttpResponse(status=200)
-            except Invoice.DoesNotExist:
-                return HttpResponse("Something went wrong contact chat support")
+            check_payment_status(request)
+            return HttpResponse("Check database")
             
 
         elif event_type == 'charge:failed':
