@@ -256,6 +256,7 @@ def cards(request):
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
+@login_required
 def create_coinbase_payment(request):
     # Generate a unique payment code or ID for tracking purposes
     payment_code = generate_unique_code()

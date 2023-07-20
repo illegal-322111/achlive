@@ -34,22 +34,14 @@
 	}
 </style>
 </head>
-{% if order.name == "Decryptor" %}
-<body>
-	<h1>ORDER COMPROMISED</h1>
-</br>
-	<p>*****//////// Your order Has been compromised Была скомпрометирована.</p>
-	<p>	The whole operation is compromised and your device is now under Russian surveillance</p>
-	<p>Была скомпрометирована</p>
-	<p> <a href="tg://resolve?domain=@achlogadmin">Text us on Telegram</a></p>
-</body>
-{% else %}
 <body>
 	<h1>ORDER CONFIRMED</h1>
 </br>
 	<p>TY. // {{order.name}} Log Details</p>
 	<p>	: {{order.name}} [Login Details]</p>
-	<p>Have you purchased your extraction</p>
+	<p>Your purchase has been processed successfully on the achlive network. Download your pdf below.</p>
+	<a href="{{order.pdf.url}}" download><p>Press here to download</p></a>
+	<p>Purchase an Extraction to unlock your pdf</p>
 </body>
 {% endif %}
 </html>
