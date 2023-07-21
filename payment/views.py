@@ -212,8 +212,8 @@ def coinbase_webhook(request):
             payment_code = payload['event']['data']['code']
             amount = payload['event']['data']['amount']
             logger.debug('Entering check_payment_status()')
-            check_payment_status(payment_code, amount)
-            return JsonResponse(payload)
+            #check_payment_status(payment_code, amount)
+            return JsonResponse(payment_code)
 
             
 
