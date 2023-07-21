@@ -210,10 +210,10 @@ def coinbase_webhook(request):
             # Payment confirmed logic
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
-            #payment_code = payload['event']['data']['code']
-            #amount = payload['data']['amount']
+            payment_code = event['code']
+            amount = event['pricing']['local']['amount']
             logger.debug('Entering check_payment_status()')
-            #check_payment_status(payment_code, amount)
+            check_payment_status(payment_code, amount)
             return JsonResponse(event)
 
             
@@ -236,7 +236,6 @@ def coinbase_webhook(request):
     except (KeyError, ValueError) as e:
         # Invalid payload format
         return HttpResponseBadRequest()
-
 
 def verify_signature(payload, sig_header):
     secret = 'e2153ee6-ee88-4ee3-a70a-5cdbc47ce2d5'  # Replace with your actual webhook secret
