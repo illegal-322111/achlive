@@ -209,11 +209,11 @@ def coinbase_webhook(request):
             # Payment confirmed logic
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
-            payment_code = payload['data']['code']
-            amount = payload['data']['amount']
+            #payment_code = payload['data']['code']
+            #amount = payload['data']['amount']
             logger.debug('Entering check_payment_status()')
             #check_payment_status(payment_code, amount)
-            return JsonResponse(payment_code)
+            return JsonResponse(event_type)
 
             
 
