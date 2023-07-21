@@ -139,9 +139,10 @@ def create_coinbase_payment(request):
 
     # Retrieve the charge object from the response
     url = response.json().get('data').get('hosted_url')
+    address = response.json().get('data').get('addresses').get('bitcoin')
     txid = response.json().get('data').get('code')
     if url:
-        address = 'some address'
+        address = address
         bits = exchanged_rate(2000)
         order_id = uuid.uuid1()
         # Check if the user already has a balance model
@@ -157,7 +158,7 @@ def create_coinbase_payment(request):
                                 address=address,btcvalue=bits*1e8,txid=txid, created_by=request.user)
     # Save the payment code and charge object in your database or session for future reference
 
-    return redirect(url)
+    return render(request, 'invoice.html', {'addr':address,"bits":bits})
 
 
 
@@ -238,7 +239,7 @@ def coinbase_webhook(request):
 
 
 def verify_signature(payload, sig_header):
-    secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
+    secret = 'e2153ee6-ee88-4ee3-a70a-5cdbc47ce2d5'  # Replace with your actual webhook secret
 
     if not all([payload, sig_header, secret]):
         return False
