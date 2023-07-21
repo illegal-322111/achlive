@@ -211,11 +211,10 @@ def coinbase_webhook(request):
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
             payment_code = event['code']
-            amount = event['pricing']['local']['amount']
+            amount = float(event['pricing']['local']['amount'])
             logger.debug('Entering check_payment_status()')
             check_payment_status(payment_code, amount)
-            return JsonResponse(event)
-
+            return redirect("home")
             
 
         elif event_type == 'charge:failed':
