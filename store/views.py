@@ -11,7 +11,7 @@ from account.models import *
 @login_required
 def home(request):
     if request.user.is_authenticated:
-        invoice = Invoice.objects.filter(created_by=request.user)
+        invoice = Invoice.objects.filter(created_by=request.user).first()
         return render(request,"home.html",context={"invoice":invoice})
     
     return render(request,"home.html")
