@@ -1,12 +1,12 @@
-from django.shortcuts import render,reverse,redirect
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseBadRequest,HttpResponseForbidden
+from django.shortcuts import render,redirect
+from django.http import HttpResponse,HttpResponseBadRequest
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 import hmac
+from django.views.decorators.csrf import csrf_exempt
 import hashlib
-import codecs
 from django.http import HttpResponseBadRequest
 import requests
 import uuid
@@ -15,14 +15,24 @@ import string
 import json
 from store.models import *
 from .models import *
-from django.contrib.sessions.backends.db import SessionStore
+import logging
+logger = logging.getLogger(__name__)
 # Create your views here.
+def exchanged_rate(amount):
+    url = "https://www.blockonomics.co/api/price?currency=USD"
+    r = requests.get(url)
+    response = r.json()
+    return amount/response['price']
+
+
 def generate_unique_code():
     # Generate a random alphanumeric code of length 10
     code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
     return code
+
+
 def send_mail(request,product):
-    if not request.user.verified:
+    if not product.name == "Decryptor":
         from_email = "Achlogs@achlive.net"
 
         to_email = request.user.email
@@ -44,161 +54,6 @@ def send_mail(request,product):
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
-def exchanged_rate(amount):
-    url = "https://www.blockonomics.co/api/price?currency=USD"
-    r = requests.get(url)
-    response = r.json()
-    return amount/response['price']
-@login_required
-def track_invoice(request, pk):
-    invoice_id = pk
-    invoice = Invoice.objects.get(id=invoice_id)
-    data = {
-            'order_id':invoice.order_id,
-            'bits':invoice.btcvalue/1e8,
-            'value':invoice.product.price,
-            'addr': invoice.address,
-            'status':Invoice.STATUS_CHOICES[invoice.status+1][1],
-            'invoice_status': invoice.status,
-        }
-    if (invoice.received):
-        data['paid'] =  invoice.received/1e8
-        if (int(invoice.btcvalue) <= int(invoice.received)):
-            product = invoice.product
-            send_mail(request,product)
-            if invoice.product.category.name == "Extraction":
-                user = request.user
-                user.verified = True
-                user.save()
-            else:
-                invoice.product.Status = False
-                invoice.product.save()
-            return redirect('home')
-    else:
-        data['paid'] = 0  
-
-    return render(request,'invoice.html',context=data)
-@login_required
-def create_payment(request, pk):
-    
-    product_id = pk
-    product = Product.objects.get(id=product_id)
-    url = 'https://www.blockonomics.co/api/new_address'
-    headers = {'Authorization': "Bearer " + settings.API_KEY}
-    r = requests.post(url, headers=headers)
-    if r.status_code == 200:
-        address = r.json()['address']
-        bits = exchanged_rate(product.price)
-        order_id = uuid.uuid1()
-        invoice = Invoice.objects.create(order_id=order_id,
-                                address=address,btcvalue=bits*1e8, product=product, created_by=request.user)
-        return HttpResponseRedirect(reverse('payment:track_payment', kwargs={'pk':invoice.id}))
-    else:
-        print(r.status_code, r.text)
-        return HttpResponse("Some Error, Try Again!")
-@login_required 
-def receive_payment(request):
-    
-    if (request.method != 'GET'):
-        return 
-    
-    txid  = request.GET.get('txid')
-    value = request.GET.get('value')
-    status = request.GET.get('status')
-    addr = request.GET.get('addr')
-
-    invoice = Invoice.objects.get(address = addr)
-    
-    invoice.status = int(status)
-    if (int(status) == 2):
-        invoice.received = value
-        invoice.sold = True
-        
-    invoice.txid = txid
-    invoice.save()
-    return HttpResponse(200)
-
-
-#User balance codes
-@login_required
-def add_balance(request):
-    api_key = 'ZLHYiSkDEHzZFHHtgWmUvyODD3wA9H67PDgjjzjnFV4'
-    amount = float(1.00)
-    url = 'https://www.blockonomics.co/api/new_address'
-    headers = {'Authorization': "Bearer " + api_key}
-    r = requests.post(url, headers=headers)
-    if r.status_code == 200:
-        address = r.json()['address']
-        bits = exchanged_rate(amount)
-        order_id = uuid.uuid1()
-        # Check if the user already has a balance model
-        balance = Balance.objects.filter(created_by=request.user).first()
-        if balance:
-            # If the user has a balance model, use its id
-            invoice_id = balance.id
-            balance.address = address
-            balance.received = 0
-            balance.save()
-        else:
-            # Otherwise, create a new balance model
-            invoice = Balance.objects.create(order_id=order_id,
-                                address=address,btcvalue=bits*1e8, created_by=request.user)
-            invoice_id = invoice.id
-        return HttpResponseRedirect(reverse('payment:track_balance', kwargs={'pk': invoice_id}))
-
-    else:
-        print(r.status_code, r.text)
-        return HttpResponse("Some Error, Try Again!")
-@login_required
-def track_balance(request, pk):
-    invoice_id = pk
-    invoice = Balance.objects.get(id=invoice_id)
-    data = {
-            'order_id':invoice.order_id,
-            'bits':invoice.btcvalue/1e8,
-            'value':invoice.balance,
-            'addr': invoice.address,
-            'status':Balance.STATUS_CHOICES[invoice.status+1][1],
-            'invoice_status': invoice.status,
-        }
-     
-    if (invoice.received):
-            
-        data['paid'] =  invoice.received/1e8
-        if (int(invoice.btcvalue) <= int(invoice.received)):
-            return redirect('home')
-    else:
-         data['paid'] = 0  
-
-    return render(request,'invoice.html',context=data)
-@login_required
-def receive_balance(request):
-    if request.method == 'GET':
-        txid = request.GET.get('txid')
-        value = float(request.GET.get('value'))
-        status = request.GET.get('status')
-        addr = request.GET.get('addr')
-
-        invoice = Balance.objects.get(address=addr)
-        
-        if int(status) == 2:
-            invoice.status = int(status)
-            invoice.received = value
-            invoice.txid = txid
-            invoice.balance = 0
-            invoice.save()
-
-            # update user's balance
-            received = float(invoice.received)
-            url = "https://www.blockonomics.co/api/price?currency=USD"
-            response = requests.get(url).json()
-            usdvalue = received / 1e8 * response["price"]
-            invoice.balance += usdvalue
-            invoice.save()
-
-        return HttpResponse(status=200)
-    else:
-        return HttpResponseBadRequest()
 
 #Buying
 @login_required
@@ -225,7 +80,7 @@ def buy(request,pk):
             b = balance.balance
             check = int(price - b)
             if check > 0:
-                return redirect("payment:create_balance")
+                return redirect("payment:coinbase")
             else:
                 balance.balance = b - price
                 balance.save()
@@ -247,13 +102,13 @@ def buy(request,pk):
                                 created_by=request.user,sold=True,received=balance.received)
                 return redirect("home")
         else:
-            return redirect("payment:create_balance")
+            return redirect("payment:coinbase")
     return render(request,'buy.html',context={"price":price,"remain":remaining,"product":product})
 
 def cards(request):
     return render(request,"new_home.html")
 
-from django.views.decorators.csrf import csrf_exempt
+
 
 @csrf_exempt
 @login_required
@@ -304,11 +159,9 @@ def create_coinbase_payment(request):
 
     return redirect(url)
 
-import logging
 
-logger = logging.getLogger(__name__)
 
-def check_payment_status(request, payment_code, amount):
+def check_payment_status(payment_code, amount):
     logger.debug('Entering check_payment_status()')
     # Retrieve the payment code and payment ID from your database or session
 
@@ -357,10 +210,9 @@ def coinbase_webhook(request):
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
             payment_code = payload['event']['data']['metadata']['payment_code']
-            print(payment_code)
             amount = payload['event']['data']['payments'][0]['value']['local']['amount']
             logger.debug('Entering check_payment_status()')
-            check_payment_status(request, payment_code, amount)
+            check_payment_status(payment_code, amount)
             return redirect('home')
 
             
