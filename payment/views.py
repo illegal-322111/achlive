@@ -205,7 +205,7 @@ def coinbase_webhook(request):
     try:
         payload = json.loads(request.body)
         event_type = payload['event']['type']
-        event = payload.get('event').get('data').get('status')
+        event = payload['event']['data']
         if event_type == 'charge:confirmed':
             # Payment confirmed logic
             # Retrieve relevant information from the payload and update your system accordingly
