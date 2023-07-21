@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse,HttpResponseBadRequest
+from django.http import HttpResponse,HttpResponseBadRequest,JsonResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
@@ -209,11 +209,11 @@ def coinbase_webhook(request):
             # Payment confirmed logic
             # Retrieve relevant information from the payload and update your system accordingly
             # For example, you can update the payment status in your database
-            payment_code = payload['event']['data']['metadata']['payment_code']
-            amount = payload['event']['data']['payments'][0]['value']['local']['amount']
+            # payment_code = payload['event']['data']['metadata']['payment_code']
+            # amount = payload['event']['data']['payments'][0]['value']['local']['amount']
             logger.debug('Entering check_payment_status()')
-            check_payment_status(payment_code, amount)
-            return HttpResponse("pending")
+            # check_payment_status(payment_code, amount)
+            return JsonResponse(payload)
 
             
 
