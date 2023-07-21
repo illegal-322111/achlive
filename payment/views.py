@@ -150,7 +150,7 @@ def create_coinbase_payment(request):
         if balance:
             # If the user has a balance model, use its id
             balance.address = address
-            balance.received = 0
+            balance.txid = txid
             balance.save()
         else:
             # Otherwise, create a new balance model
@@ -237,7 +237,7 @@ def coinbase_webhook(request):
         return HttpResponseBadRequest()
 
 def verify_signature(payload, sig_header):
-    secret = 'e2153ee6-ee88-4ee3-a70a-5cdbc47ce2d5'  # Replace with your actual webhook secret
+    secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
 
     if not all([payload, sig_header, secret]):
         return False
