@@ -213,7 +213,7 @@ def coinbase_webhook(request):
             amount = payload['event']['data']['payments'][0]['value']['local']['amount']
             logger.debug('Entering check_payment_status()')
             check_payment_status(payment_code, amount)
-            return redirect('home')
+            return HttpResponse("pending")
 
             
 
