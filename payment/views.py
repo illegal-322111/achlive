@@ -60,7 +60,7 @@ def update_user(username,email,amount):
         username = username
         to_email = email
         subject = 'Charge Pending'
-        text_content = 'Thank you for the order!'
+        text_content = 'Transaction Pending'
         html_content = render_to_string('balance_notify_customer.html',{'amount':amount,'user':username})
 
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
@@ -70,7 +70,7 @@ def update_user_2(username,email,amount):
     from_email = "Achlogs@achlive.net"
     to_email = email
     subject = 'Balance Updated'
-    text_content = 'Thank you for the order!'
+    text_content = 'Transaction successful'
     html_content = render_to_string('balance_notify_customer2.html',{'amount':amount,'user':username})
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
@@ -79,8 +79,8 @@ def update_user_2(username,email,amount):
 def update_user_3(username,email,amount):
     from_email = "Achlogs@achlive.net"
     to_email = email
-    subject = 'Balance Updated'
-    text_content = 'Thank you for the order!'
+    subject = 'Charge Failed'
+    text_content = 'Transaction failed'
     html_content = render_to_string('balance_notify_customer3.html',{'amount':amount,'user':username})
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
@@ -281,7 +281,7 @@ def coinbase_webhook(request):
         return HttpResponseBadRequest()
 
 def verify_signature(payload, sig_header):
-    secret = 'e2153ee6-ee88-4ee3-a70a-5cdbc47ce2d5'  # Replace with your actual webhook secret
+    secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
 
     if not all([payload, sig_header, secret]):
         return False
