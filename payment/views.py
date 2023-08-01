@@ -256,6 +256,7 @@ def coinbase_webhook(request):
             invoice = Balance.objects.get(txid=payment_code)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
+            amount = float(event['pricing']['local']['amount'])
             update_user(username,email,amount)
             return HttpResponse(status=200)
 
@@ -265,6 +266,7 @@ def coinbase_webhook(request):
             invoice = Balance.objects.get(txid=payment_code)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
+            amount = float(event['pricing']['local']['amount'])
             update_user(username,email,amount)
             return HttpResponse(status=200)
 
