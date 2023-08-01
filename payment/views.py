@@ -30,7 +30,7 @@ def generate_unique_code():
     code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
     return code
 
-
+#Use email functions
 def send_mail(request,product):
     if not product.name == "Decryptor":
         from_email = "Achlogs@achlive.net"
@@ -54,7 +54,6 @@ def send_mail(request,product):
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
-
 def update_user(username,email,amount):
         from_email = "Achlogs@achlive.net"
         username = username
@@ -72,6 +71,16 @@ def update_user_2(username,email,amount):
     subject = 'Balance Updated'
     text_content = 'Thank you for the order!'
     html_content = render_to_string('balance_notify_customer2.html',{'amount':amount,'user':username})
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
+def update_user_3(username,email,amount):
+    from_email = "Achlogs@achlive.net"
+    to_email = email
+    subject = 'Balance Updated'
+    text_content = 'Thank you for the order!'
+    html_content = render_to_string('balance_notify_customer3.html',{'amount':amount,'user':username})
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
     msg.attach_alternative(html_content, 'text/html')
@@ -130,7 +139,7 @@ def cards(request):
     return render(request,"new_home.html")
 
 
-
+#Adding balance
 @csrf_exempt
 @login_required
 def create_coinbase_payment(request):
@@ -241,18 +250,21 @@ def coinbase_webhook(request):
             
 
         elif event_type == 'charge:failed':
-            
-            # Payment failed logic
-            # Handle the failed payment event
-            return JsonResponse(event)
-
-        elif event_type == 'charge:pending':
-            # Payment pending logic
+            payment_code = event['code']
             invoice = Balance.objects.get(txid=payment_code)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
             update_user(username,email,amount)
-            return HttpResponse("pending")
+            return HttpResponse(status=200)
+
+        elif event_type == 'charge:pending':
+            # Payment pending logic
+            payment_code = event['code']
+            invoice = Balance.objects.get(txid=payment_code)
+            username = invoice.created_by.user_name
+            email = invoice.created_by.email
+            update_user(username,email,amount)
+            return HttpResponse(status=200)
 
         # Handle other event types if needed
 

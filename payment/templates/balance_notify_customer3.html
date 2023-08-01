@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    {% load static %}
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px 0;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .header img {
+        width: 200px;
+      }
+      .content {
+        background-color: #f4f4f4;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      .content h1 {
+        margin-top: 0;
+        font-size: 24px;
+      }
+      .content p {
+        font-size: 18px;
+        line-height: 1.5;
+      }
+      a{
+        text-decoration: none;
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img src="{% static 'bg.jpg' %}" alt="Your Logo">
+      </div>
+      <div class="content">
+        <h1>Charge Confirmed</h1>
+        <p>Dear {{user}},</p>
+        <p>We wanted to let you know that the charge of {{amount}} on your account failed. This charge was to update your balance and your balance remains unchanged.</p>
+        <p>Contact chat support immediately for assistance.</p>
+        <p>Thank you for your business!</p>
+        <a href="https://achlive.net/index/"><p>Achlive.net</p></a>
+      </div>
+    </div>
+  </body>
+</html>
