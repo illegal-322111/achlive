@@ -52,7 +52,13 @@
                         If you need any further assistance kindly text through the chat support or <a href="tg://resolve?domain=@achlogadmin">Text us on Telegram</a>
                     </h5>
                     {% endif %}
-                    <button class='btn btn-success'>I have Paid</button>
+                    {% if messages %}
+                    {% for message in messages %}
+                    <a href="{{message}}"><button class='btn btn-success'>I have Paid</button></a>
+                    {% endfor %}
+                    {% else %}
+                    <button class='btn btn-success' disabled>Waiting for payment</button>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -15,6 +15,7 @@ import string
 import json
 from store.models import *
 from .models import *
+from django.contrib import messages
 import logging
 logger = logging.getLogger(__name__)
 # Create your views here.
@@ -248,6 +249,7 @@ def coinbase_webhook(request):
             amount = float(event['pricing']['local']['amount'])
             logger.debug('Entering check_payment_status()')
             check_payment_status(payment_code, amount)
+            message = messages.success(request, "https://achlive.net/index/")
             return HttpResponse(status=200)
             
 
@@ -257,7 +259,7 @@ def coinbase_webhook(request):
             username = invoice.created_by.user_name
             email = invoice.created_by.email
             amount = float(event['pricing']['local']['amount'])
-            update_user(username,email,amount)
+            update_user_3(username,email,amount)
             return HttpResponse(status=200)
 
         elif event_type == 'charge:pending':
