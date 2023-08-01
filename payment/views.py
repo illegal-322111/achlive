@@ -115,11 +115,12 @@ def buy(request,pk):
                 balance.balance = b - price
                 balance.save()
                 
-                send_mail(request,product)
+                
                 if product.category.name == "Extraction":
                     user = request.user
                     user.verified = True
                     user.save()
+                    send_mail(request,product)
                 elif product.category.name == "Clone cards":
                     product.Status = False
                     product.save()
@@ -127,6 +128,7 @@ def buy(request,pk):
                 else:
                     product.Status = False
                     product.save()
+                    send_mail(request,product)
                 invoice = Invoice.objects.create(order_id=balance.order_id,
                                 address=balance.address,btcvalue=balance.btcvalue, product=product, 
                                 created_by=request.user,sold=True,received=balance.received)

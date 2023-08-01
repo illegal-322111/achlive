@@ -38,12 +38,12 @@
   <body>
     <div class="container">
       <div class="header">
-        <img src="{% static 'bg.jpg' %}" alt="Your Logo">
+        <img src="{% static 'images/bg.jpg' %}" alt="Your Logo">
       </div>
       <div class="content">
         <h1>Charge Pending</h1>
         <p>Dear {{user}},</p>
-        <p>We wanted to let you know that a charge of {{amount}} is currently pending on your account. This charge is to update your balance and will be processed soon.</p>
+        <p>We wanted to let you know that a charge of ${{amount}} is currently pending on your account. This charge is to update your balance and will be processed soon.</p>
         <p>For now, your balance will not be updated until charge is confirmed. Once charge is confirmed, an email will be sent to you for confirmation.</p>
         <p>If you have any questions or concerns, please don't hesitate to contact us through chat support.</p>
         <p>Thank you for your business!</p>
