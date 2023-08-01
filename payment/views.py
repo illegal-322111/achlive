@@ -260,7 +260,7 @@ def coinbase_webhook(request):
         return HttpResponseBadRequest()
 
 def verify_signature(payload, sig_header):
-    secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
+    secret = 'e2153ee6-ee88-4ee3-a70a-5cdbc47ce2d5'  # Replace with your actual webhook secret
 
     if not all([payload, sig_header, secret]):
         return False
