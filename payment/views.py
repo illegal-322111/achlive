@@ -55,6 +55,28 @@ def send_mail(request,product):
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
 
+def update_user(request,amount):
+        from_email = "Achlogs@achlive.net"
+        username = request.user.user_name
+        to_email = request.user.email
+        subject = 'Charge Pending'
+        text_content = 'Thank you for the order!'
+        html_content = render_to_string('balance_notify_customer.html',{'amount':amount,'user':username})
+
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, 'text/html')
+        msg.send()
+def update_user_2(request,amount):
+    from_email = "Achlogs@achlive.net"
+    username = request.user.user_name
+    to_email = request.user.email
+    subject = 'Balance Updated'
+    text_content = 'Thank you for the order!'
+    html_content = render_to_string('balance_notify_customer2.html',{'amount':amount,'user':username})
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
 #Buying
 @login_required
 def buy(request,pk):
@@ -162,7 +184,7 @@ def create_coinbase_payment(request):
 
 
 
-def check_payment_status(payment_code, amount):
+def check_payment_status(request, payment_code, amount):
     logger.debug('Entering check_payment_status()')
     # Retrieve the payment code and payment ID from your database or session
 
@@ -171,6 +193,7 @@ def check_payment_status(payment_code, amount):
         invoice.balance += amount
         invoice.save()
         logger.debug('Updated invoice successfully')
+        update_user_2(request,amount)
         return HttpResponse(status=200)
     except Balance.DoesNotExist:
         logger.error('Invoice does not exist')
@@ -213,7 +236,7 @@ def coinbase_webhook(request):
             payment_code = event['code']
             amount = float(event['pricing']['local']['amount'])
             logger.debug('Entering check_payment_status()')
-            check_payment_status(payment_code, amount)
+            check_payment_status(request, payment_code, amount)
             return HttpResponse(status=200)
             
 
@@ -225,7 +248,7 @@ def coinbase_webhook(request):
 
         elif event_type == 'charge:pending':
             # Payment pending logic
-            # Handle the pending payment event
+            update_user(request,amount)
             return HttpResponse("pending")
 
         # Handle other event types if needed
@@ -237,7 +260,7 @@ def coinbase_webhook(request):
         return HttpResponseBadRequest()
 
 def verify_signature(payload, sig_header):
-    secret = 'e2153ee6-ee88-4ee3-a70a-5cdbc47ce2d5'  # Replace with your actual webhook secret
+    secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
 
     if not all([payload, sig_header, secret]):
         return False
