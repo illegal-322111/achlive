@@ -1,24 +1,26 @@
+from decimal import Decimal
 from django.core.management.base import BaseCommand
-from store.models import Product, Category
+from store.models import Product
 
 class Command(BaseCommand):
-    help = 'Update products based on balance'
+    help = 'Set product balances to 2 decimal places'
 
     def handle(self, *args, **options):
-        # Define price ranges and their corresponding prices
-        price_ranges = [
-            ('7000', '7999', 200),
-            ('8000', '8999', 250),
-            ('9000', '9999', 300),
-            ('10000', '20000', 350),
-        ]
+        # Get all products
+        all_products = Product.objects.all()
 
-        # Loop through price ranges
-        for start_str, end_str, price in price_ranges:
-            products_to_update = Product.objects.filter(Balance__gte=start_str, Balance__lte=end_str)
+        # Iterate through products
+        for product in all_products:
+            # Check if the balance has more than 2 decimal places
+            balance_str = product.Balance.replace(',', '')  # Remove commas if present
+            if '.' in balance_str:
+                integer_part, decimal_part = balance_str.split('.')
+                if len(decimal_part) > 2:
+                    # Convert the balance to a Decimal and round to 2 decimal places
+                    new_balance = Decimal(balance_str).quantize(Decimal('0.00'))
 
-            for product in products_to_update:
-                product.price = price
-                product.save()
+                    # Update the product's balance
+                    product.Balance = str(new_balance)
+                    product.save()
 
-        self.stdout.write(self.style.SUCCESS('Products updated successfully.'))
+        self.stdout.write(self.style.SUCCESS('Product balances updated to 2 decimal places successfully.'))
