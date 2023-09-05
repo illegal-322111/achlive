@@ -12,12 +12,12 @@
             <div class="form">
                 
                 {% if 'email' in request.get_full_path %}
-                <h3 class="mb-4">Password Reset Success</h3>
-                <p>Check your E-mail to reset your password</p>
+                <h1>Password Reset Success</h1>
+                <p class="user">Check your E-mail to reset your password</p>
                 {% endif%}
                 {% if 'complete' in request.get_full_path %}
-                <h3 class="mb-4">Password Reset Success</h3>
-                <a href="{% url "account:login" %}">Login</a>
+                <h1>Password Reset Success</h1>
+                <a href="{% url "account:login" %}"><button class="login" type="submit">Login</button></a>
                 {% endif%}
             </div>
             
