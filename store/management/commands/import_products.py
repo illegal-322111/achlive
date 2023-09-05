@@ -18,18 +18,20 @@ class Command(BaseCommand):
         with open(file_path, 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
+                category_name = row['Category']
+                category, _ = Category.objects.get_or_create(name=category_name)
                 pdf_path = row['PDF']
                 if pdf_path:
                     with open(pdf_path, 'rb') as pdf_file:
                         pdf = File(pdf_file)
                         product_data = {
-                            'name': row['name'],
-                            'category': Category.objects.get(name=row['category']),
+                            'name': row['Name'],
+                            'category': category,
                             'Balance': row['Balance'],
                             'Title': row['Title'],
                             'Info': row['Info'],
-                            'slug': row['slug'],
-                            'price': float(row['price']),
+                            'price': float(row['Price']),
+                            'slug': row['Slug'],
                             'pdf': pdf,
                         }
                         Product.objects.create(**product_data)
