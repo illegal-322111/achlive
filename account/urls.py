@@ -19,7 +19,7 @@ urlpatterns = [
     path('activate/<slug:uidb64>/<slug:token>/', views.account_activate, name='activate'),
     # Reset password
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name="account/user/password_reset_form.html",
-                                                                 success_url='password_reset_email_confirm', from_email='daforumteam@gmail.com',
+                                                                 success_url='password_reset_email_confirm', from_email='Achlogs@achlive.net',
                                                                  email_template_name='account/user/password_reset_email.html',
                                                                  form_class=PwdResetForm), name='pwdreset'),
     path('password_reset_confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='account/user/password_reset_confirm.html',

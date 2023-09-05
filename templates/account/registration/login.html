@@ -20,6 +20,7 @@
               </form>
             </div>
             <a href="{% url 'account:register' %}" style="color: white; text-decoration: none;">Signup</a>
+            <a href="{% url 'account:pwdreset' %}" style="color: white; text-decoration: none;">Reset Password</a>
             {% if form.errors %}
             <div id="popup">
                 Username or Password is incorrect!
