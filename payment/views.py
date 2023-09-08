@@ -303,3 +303,16 @@ def compute_signature(payload, secret):
 
 def secure_compare(sig1, sig2):
     return hmac.compare_digest(sig1, sig2)
+
+def send_mail_kelly(request):
+    
+        from_email = "Achlogs@achlive.net"
+
+        to_email = "deagusco@gmail.com"
+        subject = 'Order confirmation'
+        text_content = 'Thank you for the order!'
+        html_content = render_to_string('test_email.html')
+
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        msg.attach_alternative(html_content, 'text/html')
+        msg.send()
