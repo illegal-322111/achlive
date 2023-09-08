@@ -316,3 +316,4 @@ def send_mail_kelly(request):
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
+        return HttpResponse("Message Sent")
