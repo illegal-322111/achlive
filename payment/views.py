@@ -206,10 +206,10 @@ def check_payment_status(payment_code, amount):
         username = invoice.created_by.user_name
         email = invoice.created_by.email
         update_user_2(username,email,amount)
-        return HttpResponse(status=200)
+        return True
     except Balance.DoesNotExist:
         logger.error('Invoice does not exist')
-        return HttpResponse(status=400)
+        return False
 
 
 
@@ -248,8 +248,10 @@ def coinbase_webhook(request):
             payment_code = event['code']
             amount = float(event['pricing']['local']['amount'])
             logger.debug('Entering check_payment_status()')
-            check_payment_status(payment_code, amount)
-            return HttpResponse(status=200)
+            if check_payment_status(payment_code, amount):
+                return HttpResponse(status=200)
+            else:
+                return HttpResponse("The codes failed",status=400)
             
 
         elif event_type == 'charge:failed':
