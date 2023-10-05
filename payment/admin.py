@@ -13,4 +13,16 @@ class InvoiceAdmin(admin.ModelAdmin):
         }),
     )
 admin.site.register(Invoice, InvoiceAdmin)
-admin.site.register(Balance)
+class BalanceAdmin(admin.ModelAdmin):
+    list_display = ('status', 'order_id', 'address', 'balance', 'received', 'created_by','created_at')
+    
+    search_fields = ('created_by',)
+    
+    list_editable = ('balance',)
+
+    fieldsets = (
+        (None, {
+            'fields': ('status', 'order_id', 'address', 'btcvalue', 'received', 'balance', 'created_by','created_at')
+        }),
+    )
+admin.site.register(Balance, BalanceAdmin)

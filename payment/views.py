@@ -178,17 +178,21 @@ def create_coinbase_payment(request):
         address = address
         bits = exchanged_rate(2000)
         order_id = uuid.uuid1()
+        
         # Check if the user already has a balance model
         balance = Balance.objects.filter(created_by=request.user).first()
         if balance:
             # If the user has a balance model, use its id
             balance.address = address
             balance.txid = txid
+            if balance.balance is None:
+                balance.balance = 0
+                balance.save()
             balance.save()
         else:
             # Otherwise, create a new balance model
             invoice = Balance.objects.create(order_id=order_id,
-                                address=address,btcvalue=bits*1e8,txid=txid, created_by=request.user)
+                                address=address,btcvalue=bits*1e8,txid=txid, balance=0, created_by=request.user)
     # Save the payment code and charge object in your database or session for future reference
 
     return render(request, 'invoice.html', {'addr':address,"bits":bits})
