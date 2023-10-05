@@ -195,12 +195,12 @@ def create_coinbase_payment(request):
 
 
 
-def check_payment_status(payment_code, amount):
+def check_payment_status(btc_address, amount):
     logger.debug('Entering check_payment_status()')
     # Retrieve the payment code and payment ID from your database or session
 
     try:
-        invoice = Balance.objects.get(txid=payment_code)
+        invoice = Balance.objects.get(address=btc_address)
         invoice.balance += amount
         invoice.save()
         username = invoice.created_by.user_name
@@ -210,9 +210,6 @@ def check_payment_status(payment_code, amount):
     except Balance.DoesNotExist:
         logger.error('Invoice does not exist')
         return False
-
-
-
 
 @csrf_exempt
 def coinbase_webhook(request):
@@ -243,21 +240,19 @@ def coinbase_webhook(request):
         event = payload['event']['data']
         if event_type == 'charge:confirmed':
             # Payment confirmed logic
-            # Retrieve relevant information from the payload and update your system accordingly
-            # For example, you can update the payment status in your database
-            payment_code = event['code']
+            btc_address = event['addresses']['bitcoin']
             amount = float(event['pricing']['local']['amount'])
             logger.debug('Entering check_payment_status()')
-            print(payment_code)
-            if check_payment_status(payment_code, amount):
+            print(btc_address)
+            if check_payment_status(btc_address, amount):
                 return HttpResponse(status=200)
             else:
-                return HttpResponse(f"The codes failed and the payment code is{payment_code}")
-            
+                return HttpResponse(btc_address)
+
 
         elif event_type == 'charge:failed':
-            payment_code = event['code']
-            invoice = Balance.objects.get(txid=payment_code)
+            btc_address = event['addresses']['bitcoin']
+            invoice = Balance.objects.get(address=btc_address)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
             amount = float(event['pricing']['local']['amount'])
@@ -266,8 +261,8 @@ def coinbase_webhook(request):
 
         elif event_type == 'charge:pending':
             # Payment pending logic
-            payment_code = event['code']
-            invoice = Balance.objects.get(txid=payment_code)
+            btc_address = event['addresses']['bitcoin']
+            invoice = Balance.objects.get(address=btc_address)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
             amount = float(event['pricing']['local']['amount'])
