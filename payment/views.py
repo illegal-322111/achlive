@@ -248,6 +248,7 @@ def coinbase_webhook(request):
             payment_code = event['code']
             amount = float(event['pricing']['local']['amount'])
             logger.debug('Entering check_payment_status()')
+            print(payment_code)
             if check_payment_status(payment_code, amount):
                 return HttpResponse(status=200)
             else:
