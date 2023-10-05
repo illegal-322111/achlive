@@ -1,21 +1,19 @@
 from pathlib import Path
-import environ
-import os
-env = environ.Env(
-    DEBUG=(bool, False)
-)
 
-READ_DOT_ENV_FILE = env.bool('READ_DOT_ENV_FILE', default=False)
-if READ_DOT_ENV_FILE:
-    environ.Env.read_env()
-
-DEBUG = env('DEBUG')
-SECRET_KEY = env('SECRET_KEY')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-ALLOWED_HOSTS = ["*"]
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = "2zdo-&at%(_q!axzbo@74ng*47gy_o5y3g9fej*0@5s-12wa7a"
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,7 +39,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'payment.middleware.AllowNoRefererMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
@@ -71,17 +68,20 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env("DB_NAME"),
-        'USER': env("DB_USER"),
-        'PASSWORD': env("DB_PASSWORD"),
-        'HOST': env("DB_HOST"),
-        'PORT': env("DB_PORT"),
-        'DISABLE_SERVER_SIDE_CURSORS':env("DISABLE_SERVER_SIDE_CURSORS"),
+        'ENGINE': 'django.db.backends.postgresql',
+        "URL":"postgres://default:mZD8bG1afhJS@ep-dark-cloud-16772177-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb",
+        "PRISMA_URL":"postgres://default:mZD8bG1afhJS@ep-dark-cloud-16772177-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb?pgbouncer=true&connect_timeout=15",
+        "URL_NON_POOLING":"postgres://default:mZD8bG1afhJS@ep-dark-cloud-16772177.us-east-1.postgres.vercel-storage.com:5432/verceldb",
+        "USER":"default",
+        "HOST":"ep-dark-cloud-16772177-pooler.us-east-1.postgres.vercel-storage.com",
+        "PASSWORD":"mZD8bG1afhJS",
+        "NAME":"verceldb",
     }
 }
+
 
 
 # Password validation
@@ -120,45 +120,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR/'static'
 ]
 STATIC_ROOT = BASE_DIR / "static_root"
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-SASS_PROCESSOR_ROOT = BASE_DIR/'static/scss'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "staticfiles-cdn" / "uploads"
-from .cdn.conf import * # noqa
+#from .cdn.conf import * # noqa
 LOGIN_URL = 'account:login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'account:login'
-
-
-COINBASE_COMMERCE_API_KEY = '77c13c31-17be-45f4-a9c2-ce12434c7ad4'
-API_KEY = "ZLHYiSkDEHzZFHHtgWmUvyODD3wA9H67PDgjjzjnFV4"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-EMAIL_USE_TLS = True
-EMAIL_PORT = env("EMAIL_PORT")
 AUTH_USER_MODEL = "account.Customer"
-
-if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_SECONDS = 31536000  # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    X_FRAME_OPTIONS = "DENY"
-    
-    ALLOWED_HOSTS=["*"]
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

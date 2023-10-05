@@ -209,7 +209,7 @@ def check_payment_status(payment_code, amount):
         return HttpResponse(status=200)
     except Balance.DoesNotExist:
         logger.error('Invoice does not exist')
-        return HttpResponse("Something went wrong contact chat support")
+        return HttpResponse(status=400)
 
 
 
