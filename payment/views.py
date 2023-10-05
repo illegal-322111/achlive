@@ -252,7 +252,7 @@ def coinbase_webhook(request):
             if check_payment_status(payment_code, amount):
                 return HttpResponse(status=200)
             else:
-                return HttpResponse("The codes failed",status=400)
+                return HttpResponse(f"The codes failed and the payment code is{payment_code}")
             
 
         elif event_type == 'charge:failed':
