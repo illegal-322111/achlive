@@ -215,6 +215,22 @@ def check_payment_status(btc_address, amount):
         logger.error('Invoice does not exist')
         return False
 
+def check_payment_status_1(btc_address, amount):
+    logger.debug('Entering check_payment_status()')
+    # Retrieve the payment code and payment ID from your database or session
+
+    try:
+        invoice = Balance.objects.get(address=btc_address)
+        #invoice.balance += amount
+        invoice.save()
+        username = invoice.created_by.user_name
+        email = invoice.created_by.email
+        update_user_2(username,email,amount)
+        return True
+    except Balance.DoesNotExist:
+        logger.error('Invoice does not exist')
+        return False
+
 @csrf_exempt
 def coinbase_webhook(request):
     # Verify the request method
@@ -242,7 +258,17 @@ def coinbase_webhook(request):
         payload = json.loads(request.body)
         event_type = payload['event']['type']
         event = payload['event']['data']
-        if event_type == 'charge:confirmed':
+        if event_type == 'charge:created':
+            # Payment confirmed logic
+            btc_address = event['addresses']['bitcoin']
+            amount = float(event['pricing']['local']['amount'])
+            logger.debug('Entering check_payment_status()')
+            print(btc_address)
+            if check_payment_status_1(btc_address, amount):
+                return HttpResponse(status=200)
+            else:
+                return HttpResponse(f'{btc_address}', status=400)
+        elif event_type == 'charge:confirmed':
             # Payment confirmed logic
             btc_address = event['addresses']['bitcoin']
             amount = float(event['pricing']['local']['amount'])
