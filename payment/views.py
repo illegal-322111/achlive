@@ -221,11 +221,6 @@ def check_payment_status_1(btc_address, amount):
 
     try:
         invoice = Balance.objects.get(address=btc_address)
-        #invoice.balance += amount
-        invoice.save()
-        username = invoice.created_by.user_name
-        email = invoice.created_by.email
-        update_user_2(username,email,amount)
         return True
     except Balance.DoesNotExist:
         logger.error('Invoice does not exist')
