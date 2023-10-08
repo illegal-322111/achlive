@@ -206,6 +206,7 @@ def check_payment_status(btc_address, amount):
     try:
         invoice = Balance.objects.get(address=btc_address)
         invoice.balance += amount
+        invoice.received = 1
         invoice.save()
         username = invoice.created_by.user_name
         email = invoice.created_by.email
