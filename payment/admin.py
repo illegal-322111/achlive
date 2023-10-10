@@ -16,7 +16,7 @@ admin.site.register(Invoice, InvoiceAdmin)
 class BalanceAdmin(admin.ModelAdmin):
     list_display = ('status', 'order_id', 'address', 'balance', 'received', 'created_by','created_at')
     
-    search_fields = ('created_by',)
+    search_fields = ('created_by__user_name',)
     
     list_editable = ('balance',)
 
