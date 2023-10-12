@@ -93,7 +93,7 @@ def update_user_3(username,email,amount):
 def cards_mail(request):
     from_email = "Achlogs@achlive.net"
 
-    to_email = "deagusco@gmail.com"
+    to_email = request.user.email
     subject = 'Order confirmation'
     text_content = 'Thank you for the order!'
     html_content = render_to_string('cards_notify.html')

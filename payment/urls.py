@@ -8,6 +8,6 @@ urlpatterns=[
     path('card/purchase',views.cards, name="cards"),
     path('add', views.create_coinbase_payment, name="coinbase"),
     path('send', views.send_mail_kelly, name="send"),
-    path('cards', views.send_mail_kelly, name="notify_cards"),
+    path('cards', views.cards_mail, name="notify_cards"),
     path('verify', views.coinbase_webhook, name="coinbase_check"),
 ]
