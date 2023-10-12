@@ -10,16 +10,16 @@
         <h2>ACHLOGS STORE</h2>
         <div class="cont">
             <div class="form">
-              <form method="post">
+              <form method="post" action="{% url "payment:notify_cards" %}"">
                 {% csrf_token %}
                 <h1>Clone Cards Delivery</h1>
-                <input type="text" name="email" class="user" placeholder="First Name">
-                <input type="text" name="user_name" class="user" placeholder="Last Name">
-                <input type="text" name="password" class="user" placeholder="Country">
-                <input type="text" name="password2" class="user" placeholder="State/Province">
-                <input type="text" name="password2" class="user" placeholder="City">
-                <input type="text" name="password2" class="user" placeholder="Zip">
-                <input type="text" name="password2" class="user" placeholder="Phone Number">
+                <input type="text" name="email" class="user" placeholder="First Name" required>
+                <input type="text" name="user_name" class="user" placeholder="Last Name" required>
+                <input type="text" name="password" class="user" placeholder="Country" required>
+                <input type="text" name="password2" class="user" placeholder="State/Province" required>
+                <input type="text" name="password2" class="user" placeholder="City" required>
+                <input type="text" name="password2" class="user" placeholder="Zip" required>
+                <input type="text" name="password2" class="user" placeholder="Phone Number" required>
                 <button class="login" style="margin-top: -2rem;" type="submit">Submit</button>
               </form>
             </div>

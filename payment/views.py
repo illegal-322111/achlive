@@ -25,11 +25,11 @@ def exchanged_rate(amount):
     response = r.json()
     return amount/response['price']
 
-
 def generate_unique_code():
     # Generate a random alphanumeric code of length 10
     code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
     return code
+
 
 #Use email functions
 def send_mail(request,product):
@@ -55,6 +55,7 @@ def send_mail(request,product):
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
+
 def update_user(username,email,amount):
         from_email = "Achlogs@achlive.net"
         username = username
@@ -66,6 +67,7 @@ def update_user(username,email,amount):
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
+        
 def update_user_2(username,email,amount):
     from_email = "Achlogs@achlive.net"
     to_email = email
@@ -76,6 +78,7 @@ def update_user_2(username,email,amount):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
+    
 def update_user_3(username,email,amount):
     from_email = "Achlogs@achlive.net"
     to_email = email
@@ -86,6 +89,20 @@ def update_user_3(username,email,amount):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
+
+def cards_mail(request):
+    from_email = "Achlogs@achlive.net"
+
+    to_email = "deagusco@gmail.com"
+    subject = 'Order confirmation'
+    text_content = 'Thank you for the order!'
+    html_content = render_to_string('cards_notify.html')
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
+    return redirect('home')
+
 #Buying
 @login_required
 def buy(request,pk):
@@ -148,14 +165,17 @@ def cards(request):
 def create_coinbase_payment(request):
     # Generate a unique payment code or ID for tracking purposes
     payment_code = generate_unique_code()
-
+    user = request.user
+    user = Customer.objects.get(user_name=user)
+    user_id = user.pk
     # Construct the payload with necessary information
     payload = {
         'name': 'Achlive Pay',
         'description': 'Balance Topup',
         'pricing_type': 'no_price',
         'metadata': {
-            'payment_code': payment_code
+            'payment_code': payment_code,
+            'customer_id':user_id,
         }
     }
 
@@ -197,14 +217,12 @@ def create_coinbase_payment(request):
 
     return render(request, 'invoice.html', {'addr':address,"bits":bits})
 
-
-
-def check_payment_status(btc_address, amount):
+def check_payment_status(customer_id, amount):
     logger.debug('Entering check_payment_status()')
     # Retrieve the payment code and payment ID from your database or session
 
     try:
-        invoice = Balance.objects.get(address=btc_address)
+        invoice = Balance.objects.get(created_by=customer_id)
         invoice.balance += amount
         invoice.received = 1
         invoice.save()
@@ -216,12 +234,12 @@ def check_payment_status(btc_address, amount):
         logger.error('Invoice does not exist')
         return False
 
-def check_payment_status_1(btc_address, amount):
+def check_payment_status_1(customer_id, amount):
     logger.debug('Entering check_payment_status()')
     # Retrieve the payment code and payment ID from your database or session
 
     try:
-        invoice = Balance.objects.get(address=btc_address)
+        invoice = Balance.objects.get(created_by=customer_id)
         return True
     except Balance.DoesNotExist:
         logger.error('Invoice does not exist')
@@ -254,31 +272,27 @@ def coinbase_webhook(request):
         payload = json.loads(request.body)
         event_type = payload['event']['type']
         event = payload['event']['data']
+        metadata = event['metadata']
         if event_type == 'charge:created':
             # Payment confirmed logic
-            btc_address = event['addresses']['bitcoin']
+            customer_id = metadata['customer_id']
             amount = float(event['pricing']['local']['amount'])
-            logger.debug('Entering check_payment_status()')
-            print(btc_address)
-            if check_payment_status_1(btc_address, amount):
+            if check_payment_status_1(customer_id, amount):
                 return HttpResponse(status=200)
             else:
-                return HttpResponse(f'{btc_address}', status=400)
+                return HttpResponse(f'failed', status=400)
         elif event_type == 'charge:confirmed':
-            # Payment confirmed logic
-            btc_address = event['addresses']['bitcoin']
+            customer_id = metadata['customer_id']
             amount = float(event['pricing']['local']['amount'])
-            logger.debug('Entering check_payment_status()')
-            print(btc_address)
-            if check_payment_status(btc_address, amount):
+            if check_payment_status(customer_id, amount):
                 return HttpResponse(status=200)
             else:
-                return HttpResponse(btc_address)
+                return HttpResponse("Failed")
 
 
         elif event_type == 'charge:failed':
-            btc_address = event['addresses']['bitcoin']
-            invoice = Balance.objects.get(address=btc_address)
+            customer_id = metadata['customer_id']
+            invoice = Balance.objects.get(created_by=customer_id)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
             amount = float(event['pricing']['local']['amount'])
@@ -286,9 +300,8 @@ def coinbase_webhook(request):
             return HttpResponse(status=200)
 
         elif event_type == 'charge:pending':
-            # Payment pending logic
-            btc_address = event['addresses']['bitcoin']
-            invoice = Balance.objects.get(address=btc_address)
+            customer_id = metadata['customer_id']
+            invoice = Balance.objects.get(created_by=customer_id)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
             amount = float(event['pricing']['local']['amount'])
@@ -317,12 +330,10 @@ def verify_signature(payload, sig_header):
     # Signature verification successful
     return True
 
-
 def compute_signature(payload, secret):
     secret_bytes = bytes(secret, 'utf-8')
     signature = hmac.new(secret_bytes, payload, hashlib.sha256).hexdigest()
     return signature
-
 
 def secure_compare(sig1, sig2):
     return hmac.compare_digest(sig1, sig2)
