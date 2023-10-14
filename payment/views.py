@@ -273,17 +273,17 @@ def coinbase_webhook(request):
         payload = json.loads(request.body)
         event_type = payload['event']['type']
         event = payload['event']['data']
-        metadata = event['metadata']
+        metadata = event.get('metadata', {})
         if event_type == 'charge:created':
             # Payment confirmed logic
-            customer_id = metadata['customer_id']
+            customer_id = metadata.get('customer_id')
             amount = float(event['pricing']['local']['amount'])
             if check_payment_status_1(customer_id, amount):
                 return HttpResponse(status=200)
             else:
                 return HttpResponse(f'failed', status=404)
         elif event_type == 'charge:confirmed':
-            customer_id = metadata['customer_id']
+            customer_id = metadata.get('customer_id')
             amount = float(event['pricing']['local']['amount'])
             if check_payment_status(customer_id, amount):
                 return HttpResponse(status=200)
@@ -292,7 +292,7 @@ def coinbase_webhook(request):
 
 
         elif event_type == 'charge:failed':
-            customer_id = metadata['customer_id']
+            customer_id = metadata.get('customer_id')
             invoice = Balance.objects.get(created_by=customer_id)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
@@ -301,7 +301,7 @@ def coinbase_webhook(request):
             return HttpResponse(status=200)
 
         elif event_type == 'charge:pending':
-            customer_id = metadata['customer_id']
+            customer_id = metadata.get('customer_id')
             invoice = Balance.objects.get(created_by=customer_id)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
