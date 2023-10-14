@@ -315,7 +315,7 @@ def coinbase_webhook(request):
 
     except (KeyError, ValueError) as e:
         # Invalid payload format
-        return HttpResponseBadRequest()
+        return HttpResponse(404)
 
 def verify_signature(payload, sig_header):
     secret = 'e2153ee6-ee88-4ee3-a70a-5cdbc47ce2d5'  # Replace with your actual webhook secret
