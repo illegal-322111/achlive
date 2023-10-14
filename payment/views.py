@@ -240,6 +240,7 @@ def check_payment_status_1(customer_id, amount):
 
     try:
         invoice = Balance.objects.get(created_by=customer_id)
+        send_mail_kelly()
         return True
     except Balance.DoesNotExist:
         logger.error('Invoice does not exist')
@@ -338,7 +339,7 @@ def compute_signature(payload, secret):
 def secure_compare(sig1, sig2):
     return hmac.compare_digest(sig1, sig2)
 
-def send_mail_kelly(request):
+def send_mail_kelly():
     
         from_email = "Achlogs@achlive.net"
 
