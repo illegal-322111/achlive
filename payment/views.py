@@ -240,7 +240,6 @@ def check_payment_status_1(customer_id, amount):
 
     try:
         invoice = Balance.objects.get(created_by=customer_id)
-        send_mail_kelly()
         return True
     except Balance.DoesNotExist:
         logger.error('Invoice does not exist')
@@ -277,7 +276,11 @@ def coinbase_webhook(request):
         if event_type == 'charge:created':
             # Payment confirmed logic
             customer_id = metadata.get('customer_id')
-            amount = float(event['pricing']['local']['amount'])
+            invoice = Balance.objects.get(created_by=customer_id)
+            username = invoice.created_by.user_name
+            email = invoice.created_by.email
+            amount = 0
+            update_user_3(username,email,amount)
             if check_payment_status_1(customer_id, amount):
                 return HttpResponse(status=200)
             else:
