@@ -278,7 +278,7 @@ def coinbase_webhook(request):
             customer_id = metadata.get('customer_id')
             amount = float(event['pricing']['local']['amount'])
             if check_payment_status(customer_id, amount):
-                return HttpResponse(status=200)
+                return HttpResponse(status=202)
             else:
                 return HttpResponseBadRequest()
 
@@ -290,7 +290,7 @@ def coinbase_webhook(request):
             email = invoice.created_by.email
             amount = float(event['pricing']['local']['amount'])
             update_user_3(username,email,amount)
-            return HttpResponse(status=200)
+            return HttpResponse(status=404)
 
         elif event_type == 'charge:pending':
             customer_id = metadata.get('customer_id')
@@ -307,7 +307,7 @@ def coinbase_webhook(request):
 
     except (KeyError, ValueError) as e:
         # Invalid payload format
-        return HttpResponse(404)
+        return HttpResponseBadRequest()
 
 def verify_signature(payload, sig_header):
     secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
@@ -331,7 +331,7 @@ def compute_signature(payload, secret):
 def secure_compare(sig1, sig2):
     return hmac.compare_digest(sig1, sig2)
 
-def send_mail_kelly():
+def send_mail_kelly(request):
     
         from_email = "Achlogs@achlive.net"
 
