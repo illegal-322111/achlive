@@ -280,7 +280,7 @@ def coinbase_webhook(request):
             if check_payment_status_1(customer_id, amount):
                 return HttpResponse(status=200)
             else:
-                return HttpResponse(f'failed', status=400)
+                return HttpResponse(f'failed', status=404)
         elif event_type == 'charge:confirmed':
             customer_id = metadata['customer_id']
             amount = float(event['pricing']['local']['amount'])
