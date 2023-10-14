@@ -262,7 +262,7 @@ def coinbase_webhook(request):
     is_valid_signature = verify_signature(payload, sig_header)
 
     if not is_valid_signature:
-        return HttpResponse(status=404)
+        return HttpResponseBadRequest()
 
     # Verify the Referer header
     
@@ -273,25 +273,14 @@ def coinbase_webhook(request):
         event_type = payload['event']['type']
         event = payload['event']['data']
         metadata = event.get('metadata', {})
-        if event_type == 'charge:created':
-            # Payment confirmed logic
-            customer_id = metadata.get('customer_id')
-            invoice = Balance.objects.get(created_by=customer_id)
-            username = invoice.created_by.user_name
-            email = invoice.created_by.email
-            amount = 0
-            update_user_3(username,email,amount)
-            if check_payment_status_1(customer_id, amount):
-                return HttpResponse(status=200)
-            else:
-                return HttpResponse(f'failed', status=404)
-        elif event_type == 'charge:confirmed':
+        
+        if event_type == 'charge:confirmed':
             customer_id = metadata.get('customer_id')
             amount = float(event['pricing']['local']['amount'])
             if check_payment_status(customer_id, amount):
                 return HttpResponse(status=200)
             else:
-                return HttpResponse("Failed")
+                return HttpResponseBadRequest()
 
 
         elif event_type == 'charge:failed':
@@ -321,7 +310,7 @@ def coinbase_webhook(request):
         return HttpResponse(404)
 
 def verify_signature(payload, sig_header):
-    secret = 'e2153ee6-ee88-4ee3-a70a-5cdbc47ce2d5'  # Replace with your actual webhook secret
+    secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
 
     if not all([payload, sig_header, secret]):
         return False
