@@ -262,7 +262,7 @@ def coinbase_webhook(request):
     is_valid_signature = verify_signature(payload, sig_header)
 
     if not is_valid_signature:
-        return HttpResponseBadRequest()
+        return HttpResponse(status=404)
 
     # Verify the Referer header
     
