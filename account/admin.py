@@ -9,4 +9,4 @@ class CustomerAdmin(admin.ModelAdmin):
     list_filter = ('is_active',)  # Make sure to use a tuple with a comma at the end
     list_editable = ('is_active',)
     readonly_fields = ('email',)  # Make sure to use a tuple with a comma at the end
-    search_fields = ('user_name',)
+    search_fields = ('user_name','email',)
