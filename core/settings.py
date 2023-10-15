@@ -17,7 +17,7 @@ if READ_DOT_ENV_FILE:
 SECRET_KEY = "2zdo-&at%(_q!axzbo@74ng*47gy_o5y3g9fej*0@5s-12wa7a"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -25,6 +25,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -135,11 +136,27 @@ MEDIA_ROOT = BASE_DIR / "staticfiles-cdn" / "uploads"
 LOGIN_URL = 'account:login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'account:login'
+
+# settings.py
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("https://achlive.net", 6379)],  # Replace with your Redis server details
+        },
+    },
+}
+
+# Make sure you have channels and channels-redis installed.
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "account.Customer"
+CORS_ALLOW_ALL_ORIGINS = True
+ASGI_APPLICATION = "core.asgi.application"
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")

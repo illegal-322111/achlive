@@ -55,13 +55,9 @@
                         If you need any further assistance kindly text through the chat support or <a href="tg://resolve?domain=@achlogadmin">Text us on Telegram</a>
                     </h5>
                     {% endif %}
-                    {% if messages %}
-                    {% for message in messages %}
-                    <a href="{{message}}"><button class='btn btn-success'>I have Paid</button></a>
-                    {% endfor %}
-                    {% else %}
+                    
                     <button class='btn btn-success' disabled>Waiting for payment</button>
-                    {% endif %}
+                    
                 </div>
             </div>
         </div>
@@ -140,8 +136,25 @@
 
    </style>
    <script type="text/javascript">
-    var address="{{addr}}";
-    var status="{{invoice_status}}";
-  </script>
-  <script type="text/javascript" src="{% static 'js/invoice.js' %}"></script>
+    
+  
+    const socket = new WebSocket('ws://achlive.net/ws/achlive/?user_id={{request.user.pk}}');
+
+
+    socket.onmessage = (event) => {
+    console.log('Message received:', event.data);
+    const data = JSON.parse(event.data);
+
+    // Check if the message is "Payment confirmed"
+    if (data.message === 'Payment confirmed') {
+        const button = document.querySelector('.btn-success');
+
+        // Enable the button and set the text to "Back home"
+        button.removeAttribute('disabled');
+        button.textContent = 'Back home';
+    }
+
+    // Handle other data received from the server as needed
+};
+</script>
 </html>

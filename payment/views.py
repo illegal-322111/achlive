@@ -1,10 +1,13 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseBadRequest,JsonResponse
 from django.conf import settings
+import asyncio
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 import hmac
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from django.views.decorators.csrf import csrf_exempt
 import hashlib
 from django.http import HttpResponseBadRequest
@@ -18,6 +21,11 @@ from .models import *
 from django.contrib import messages
 import logging
 logger = logging.getLogger(__name__)
+# views.py
+channel_layer = get_channel_layer()
+from .consumers import CoinbaseWebsocketConsumer
+
+
 # Create your views here.
 def exchanged_rate(amount):
     url = "https://www.blockonomics.co/api/price?currency=USD"
@@ -186,7 +194,7 @@ def create_coinbase_payment(request):
         'pricing_type': 'no_price',
         'metadata': {
             'payment_code': payment_code,
-            'customer_id':user_id,
+           # 'customer_id':user_id,
         }
     }
 
@@ -210,6 +218,7 @@ def create_coinbase_payment(request):
         bits = exchanged_rate(2000)
         order_id = uuid.uuid1()
         
+
         # Check if the user already has a balance model
         balance = Balance.objects.filter(created_by=request.user).first()
         if balance:
@@ -237,6 +246,13 @@ def check_payment_status(customer_id, amount):
         invoice.balance += amount
         invoice.received = 1
         invoice.save()
+        async_to_sync(channel_layer.group_send)(
+            f"user_{customer_id}_group",
+            {
+                "type": "webhook_update",
+                "message": "Payment confirmed"
+            }
+        )
         username = invoice.created_by.user_name
         email = invoice.created_by.email
         update_user_2(username,email,amount)
@@ -289,6 +305,7 @@ def coinbase_webhook(request):
             customer_id = metadata.get('customer_id')
             amount = float(event['pricing']['local']['amount'])
             if check_payment_status(customer_id, amount):
+                
                 return HttpResponse(status=202)
             else:
                 return HttpResponseBadRequest()
@@ -298,9 +315,7 @@ def coinbase_webhook(request):
             invoice = Balance.objects.get(created_by=customer_id)
             username = invoice.created_by.user_name
             email = invoice.created_by.email
-            amount = 0
-            update_user_1(username,email,amount)
-            return HttpResponse(status=404)
+            return HttpResponse(status=200)
         
         elif event_type == 'charge:failed':
             customer_id = metadata.get('customer_id')
