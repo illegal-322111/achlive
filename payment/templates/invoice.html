@@ -136,11 +136,7 @@
 
    </style>
    <script type="text/javascript">
-    
-  
-    const socket = new WebSocket('ws://achlive.net/ws/achlive/?user_id={{request.user.pk}}');
-
-
+    const socket = new WebSocket('wss://achlive.net/ws/achlive/?user_id={{request.user.pk}}');
     socket.onmessage = (event) => {
     console.log('Message received:', event.data);
     const data = JSON.parse(event.data);
