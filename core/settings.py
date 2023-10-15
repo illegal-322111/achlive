@@ -141,7 +141,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("https://achlive.net", 6379)],  # Replace with your Redis server details
+            "hosts": [("achlive-0001-001.achlive.hwd0hy.eun1.cache.amazonaws.com:6379", 6379)],  # Replace with your Redis server details
         },
     },
 }
