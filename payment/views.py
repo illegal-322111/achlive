@@ -369,7 +369,7 @@ def send_mail_kelly(request):
     
         from_email = "Achlogs@achlive.net"
 
-        to_email = "deagusco@gmail.com"
+        to_email = "chrissmoore83@gmail.com"
         subject = 'Order confirmation'
         text_content = 'Thank you for the order!'
         html_content = render_to_string('test_email.html')
