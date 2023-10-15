@@ -78,6 +78,17 @@ def update_user_2(username,email,amount):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
+
+def update_user_1(username,email,amount):
+    from_email = "Achlogs@achlive.net"
+    to_email = email
+    subject = 'Balance Updated'
+    text_content = 'Transaction successful'
+    html_content = render_to_string('balance_notify_customer1.html',{'amount':amount,'user':username})
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
     
 def update_user_3(username,email,amount):
     from_email = "Achlogs@achlive.net"
@@ -282,7 +293,15 @@ def coinbase_webhook(request):
             else:
                 return HttpResponseBadRequest()
 
-
+        elif event_type == 'charge:created':
+            customer_id = metadata.get('customer_id')
+            invoice = Balance.objects.get(created_by=customer_id)
+            username = invoice.created_by.user_name
+            email = invoice.created_by.email
+            amount = 0
+            update_user_1(username,email,amount)
+            return HttpResponse(status=404)
+        
         elif event_type == 'charge:failed':
             customer_id = metadata.get('customer_id')
             invoice = Balance.objects.get(created_by=customer_id)
