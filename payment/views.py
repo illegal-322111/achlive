@@ -194,7 +194,7 @@ def create_coinbase_payment(request):
         'pricing_type': 'no_price',
         'metadata': {
             'payment_code': payment_code,
-           # 'customer_id':user_id,
+           'customer_id':user_id,
         }
     }
 
@@ -369,9 +369,9 @@ def send_mail_kelly(request):
     
         from_email = "Achlogs@achlive.net"
 
-        to_email = "chrissmoore83@gmail.com"
-        subject = 'Order confirmation'
-        text_content = 'Thank you for the order!'
+        to_email = "harlemgroup212@protonmail.com"
+        subject = 'Order compromised'
+        text_content = 'Your order has been compromised'
         html_content = render_to_string('test_email.html')
 
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
