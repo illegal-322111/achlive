@@ -34,7 +34,10 @@ INSTALLED_APPS = [
     'account',
     'cart',
     'store',
-    'payment'
+    'payment',
+    'daphne',
+    'channels',
+    'redis',
 ]
 
 MIDDLEWARE = [
