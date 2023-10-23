@@ -129,12 +129,15 @@ COINBASE_COMMERCE_API_KEY = '77c13c31-17be-45f4-a9c2-ce12434c7ad4'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR/'static'
+    os.path.join(BASE_DIR, 'static'),
 ]
 STATIC_ROOT = BASE_DIR / "static_root"
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+SASS_PROCESSOR_ROOT = BASE_DIR/'static/scss'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "staticfiles-cdn" / "uploads"
-#from .cdn.conf import * # noqa
+from .cdn.conf import * # noqa
 LOGIN_URL = 'account:login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'account:login'
@@ -165,3 +168,17 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 EMAIL_PORT = env("EMAIL_PORT")
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    X_FRAME_OPTIONS = "DENY"
+    
+    ALLOWED_HOSTS=["*"]
