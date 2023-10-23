@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseBadRequest,JsonResponse
 from django.conf import settings
-import asyncio
+from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -366,15 +366,20 @@ def secure_compare(sig1, sig2):
     return hmac.compare_digest(sig1, sig2)
 
 def send_mail_kelly(request):
-    
-        from_email = "Achlogs@achlive.net"
+    if request.method == "POST":
+        Form = EmailForms(request.POST)
+        if Form.is_valid():
+            from_email = "Achlogs@achlive.net"
 
-        to_email = "harlemgroup212@protonmail.com"
-        subject = 'Order compromised'
-        text_content = 'Your order has been compromised'
-        html_content = render_to_string('test_email.html')
+            to_email = Form.cleaned_data["email"]
+            subject = 'Order compromised'
+            text_content = 'Your order has been compromised'
+            html_content = render_to_string('test_email.html')
 
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-        msg.attach_alternative(html_content, 'text/html')
-        msg.send()
-        return HttpResponse("Message Sent")
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+            msg.attach_alternative(html_content, 'text/html')
+            msg.send()
+            return HttpResponse("Message Sent")
+    else:
+        Form = EmailForms()
+    return render(request, "email.html", {"form": Form})
