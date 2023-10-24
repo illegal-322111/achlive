@@ -81,13 +81,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        "URL":"postgres://default:mZD8bG1afhJS@ep-dark-cloud-16772177-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb",
-        "PRISMA_URL":"postgres://default:mZD8bG1afhJS@ep-dark-cloud-16772177-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb?pgbouncer=true&connect_timeout=15",
-        "URL_NON_POOLING":"postgres://default:mZD8bG1afhJS@ep-dark-cloud-16772177.us-east-1.postgres.vercel-storage.com:5432/verceldb",
+        "URL":"postgres://default:7xAEVnDgfbB4@ep-bold-shape-23958752-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb",
+        "PRISMA_URL":"postgres://default:7xAEVnDgfbB4@ep-bold-shape-23958752-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb?pgbouncer=true&connect_timeout=15",
+        "URL_NON_POOLING":"postgres://default:7xAEVnDgfbB4@ep-bold-shape-23958752.us-east-1.postgres.vercel-storage.com:5432/verceldb",
         "USER":"default",
-        "HOST":"ep-dark-cloud-16772177-pooler.us-east-1.postgres.vercel-storage.com",
-        "PASSWORD":"mZD8bG1afhJS",
-        "NAME":"verceldb",
+        "HOST":"ep-bold-shape-23958752-pooler.us-east-1.postgres.vercel-storage.com",
+        "PASSWORD":"7xAEVnDgfbB4",
+        "DATABASE":"verceldb",
     }
 }
 
