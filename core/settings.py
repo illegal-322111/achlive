@@ -1,5 +1,6 @@
 from pathlib import Path
 import environ
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
@@ -35,9 +36,9 @@ INSTALLED_APPS = [
     'cart',
     'store',
     'payment',
-    #'daphne',
-    #'channels',
-    #'redis',
+    'daphne',
+    'channels',
+    'redis',
 ]
 
 MIDDLEWARE = [
@@ -143,14 +144,14 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'account:login'
 
 # settings.py
-"""CHANNEL_LAYERS = {
+CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [("achlive-0001-001.achlive.hwd0hy.eun1.cache.amazonaws.com:6379", 6379)],  # Replace with your Redis server details
         },
     },
-}"""
+}
 
 # Make sure you have channels and channels-redis installed.
 
