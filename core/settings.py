@@ -88,7 +88,7 @@ DATABASES = {
         "USER":"default",
         "HOST":"ep-bold-shape-23958752-pooler.us-east-1.postgres.vercel-storage.com",
         "PASSWORD":"7xAEVnDgfbB4",
-        "DATABASE":"verceldb",
+        "NAME":"verceldb",
     }
 }
 
