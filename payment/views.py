@@ -22,7 +22,6 @@ from django.contrib import messages
 import logging
 logger = logging.getLogger(__name__)
 
-from .consumers import CoinbaseWebsocketConsumer
 
 
 # Create your views here.
