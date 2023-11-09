@@ -7,18 +7,14 @@ boto3==1.24.70
 botocore==1.27.70
 certifi==2022.6.15
 cffi==1.16.0
-channels==4.0.0
-channels-redis==4.1.0
 charset-normalizer==2.0.12
 colorama==0.4.5
 constantly==15.1.0
 cryptography==41.0.4
-daphne==4.0.0
 distlib==0.3.4
 Django==4.1.1
 django-environ==0.9.0
 django-storages==1.13.1
-forex-python==1.8
 gunicorn==20.1.0
 hyperlink==21.0.0
 idna==3.3
@@ -46,7 +42,6 @@ service-identity==23.1.0
 simplejson==3.17.6
 six==1.16.0
 sqlparse==0.4.2
-stripe==5.0.0
 toml==0.10.2
 tox==3.25.0
 txaio==23.1.1
