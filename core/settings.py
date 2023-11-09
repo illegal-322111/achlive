@@ -36,9 +36,6 @@ INSTALLED_APPS = [
     'cart',
     'store',
     'payment',
-    #'daphne',
-    #'channels',
-    #'redis',
 ]
 
 MIDDLEWARE = [
@@ -143,16 +140,6 @@ LOGIN_URL = 'account:login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'account:login'
 
-# settings.py
-"""CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("achlive-0001-001.achlive.hwd0hy.eun1.cache.amazonaws.com:6379", 6379)],  # Replace with your Redis server details
-        },
-    },
-}"""
-
 # Make sure you have channels and channels-redis installed.
 
 # Default primary key field type
@@ -161,7 +148,6 @@ LOGOUT_REDIRECT_URL = 'account:login'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "account.Customer"
 CORS_ALLOW_ALL_ORIGINS = True
-ASGI_APPLICATION = "core.asgi.application"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
