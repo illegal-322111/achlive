@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 import hmac
-from channels.layers import get_channel_layer
+
 from asgiref.sync import async_to_sync
 from django.views.decorators.csrf import csrf_exempt
 import hashlib
@@ -21,8 +21,7 @@ from .models import *
 from django.contrib import messages
 import logging
 logger = logging.getLogger(__name__)
-# views.py
-channel_layer = get_channel_layer()
+
 from .consumers import CoinbaseWebsocketConsumer
 
 
@@ -246,13 +245,6 @@ def check_payment_status(customer_id, amount):
         invoice.balance += amount
         invoice.received = 1
         invoice.save()
-        async_to_sync(channel_layer.group_send)(
-            f"user_{customer_id}_group",
-            {
-                "type": "webhook_update",
-                "message": "Payment confirmed"
-            }
-        )
         username = invoice.created_by.user_name
         email = invoice.created_by.email
         update_user_2(username,email,amount)
