@@ -16,7 +16,7 @@ from payment.models import Invoice
 @login_required
 def dashboard(request):
     user = Customer.objects.get(user_name=request.user)
-    invoice = Invoice.objects.filter(sold=True, user=user)
+    invoice = Invoice.objects.filter(sold=True, created_by=user)
     data = {
         "products":invoice
     }
