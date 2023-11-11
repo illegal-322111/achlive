@@ -106,7 +106,7 @@
                             </ul>
                         </li>-->
 
-                        <!--<li class="sidebar-item  has-sub">
+                        <li class="sidebar-item  has-sub">
                             <a href="#" class="sidebar-link">
                                 <i class="fas fa-university"></i>
                                 <span>EUROPEAN BANKS</span>
@@ -114,11 +114,11 @@
                             <ul class="submenu ">
                                 {% for category in europe %}
                                 <li class="submenu-item ">
-                                    <a href="barclays.php">{{category.name}}</a>
+                                    <a href="{{category.get_absolute_url}}">{{category.name}}</a>
                                 </li>
                                 {% endfor %}
                             </ul>
-                        </li>-->
+                        </li>
                         {% for category in categories %}
                         {% if category.name == "Extraction" %}
                         {% else %}
