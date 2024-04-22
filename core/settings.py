@@ -121,7 +121,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-COINBASE_COMMERCE_API_KEY = '77c13c31-17be-45f4-a9c2-ce12434c7ad4'
+COINBASE_COMMERCE_API_KEY = 'f607d7c8-cdc7-49dc-bc53-06be7380ae1d'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
