@@ -232,6 +232,7 @@ def receive_balance(request):
         status = request.GET.get('status')
         addr = request.GET.get('addr')
         url = "https://www.blockonomics.co/api/price?currency=USD"
+        received = float(value)
         response = requests.get(url).json()
         usdvalue = received / 1e8 * response["price"]
         try:
