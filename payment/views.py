@@ -231,19 +231,18 @@ def receive_balance(request):
         value = float(request.GET.get('value'))
         status = request.GET.get('status')
         addr = request.GET.get('addr')
+        url = "https://www.blockonomics.co/api/price?currency=USD"
+        response = requests.get(url).json()
+        usdvalue = received / 1e8 * response["price"]
         try:
             invoice = Balance.objects.get(address=addr)
         except Balance.DoesNotExist:
             ad = Addr.objects.get(address=addr)
             invoice = ad.balance
         if int(status) == 0:
-            response = requests.get(url).json()
-            usdvalue = value / 1e8 * response["price"]
             update_user_1(invoice.created_by.user_name,invoice.created_by.email,usdvalue)
             return HttpResponse(status=200)
         elif int(status) == 1:
-            response = requests.get(url).json()
-            usdvalue = value / 1e8 * response["price"]
             update_user(invoice.created_by.user_name,invoice.created_by.email,usdvalue)
             return HttpResponse(status=200)
         elif int(status) == 2:
@@ -253,9 +252,6 @@ def receive_balance(request):
             invoice.save()
             # update user's balance
             received = float(invoice.received)
-            url = "https://www.blockonomics.co/api/price?currency=USD"
-            response = requests.get(url).json()
-            usdvalue = received / 1e8 * response["price"]
             invoice.balance += usdvalue
             invoice.save()
             update_user_2(invoice.created_by.user_name,invoice.created_by.email,usdvalue)
