@@ -236,10 +236,8 @@ def receive_balance(request):
             return HttpResponse(status=200)
         if int(status) == 0:
             update_user_1(request.user.user_name,request.user.email,value)
-            return HttpResponse(status=200)
         elif int(status) == 1:
             update_user(request.user.user_name,request.user.email,value)
-            return HttpResponse(status=200)
         elif int(status) == 2:
             invoice.status = int(status)
             invoice.received = value
