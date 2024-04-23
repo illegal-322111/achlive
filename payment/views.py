@@ -237,10 +237,12 @@ def receive_balance(request):
             ad = Addr.objects.get(address=addr)
             invoice = ad.balance
         if int(status) == 0:
+            response = requests.get(url).json()
             usdvalue = value / 1e8 * response["price"]
             update_user_1(invoice.created_by.user_name,invoice.created_by.email,usdvalue)
             return HttpResponse(status=200)
         elif int(status) == 1:
+            response = requests.get(url).json()
             usdvalue = value / 1e8 * response["price"]
             update_user(invoice.created_by.user_name,invoice.created_by.email,usdvalue)
             return HttpResponse(status=200)
