@@ -1,26 +1,16 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse,HttpResponseBadRequest,JsonResponse
-from django.conf import settings
+from django.http import HttpResponse,HttpResponseBadRequest,HttpResponseRedirect
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-import hmac
-
-from asgiref.sync import async_to_sync
-from django.views.decorators.csrf import csrf_exempt
-import hashlib
 from django.http import HttpResponseBadRequest
 import requests
 import uuid
 import random
 import string
-import json
 from store.models import *
 from .models import *
-from django.contrib import messages
-import logging
-logger = logging.getLogger(__name__)
 
 
 
@@ -177,184 +167,96 @@ def cards(request):
 
 
 #Adding balance
-@csrf_exempt
 @login_required
-def create_coinbase_payment(request):
-    # Generate a unique payment code or ID for tracking purposes
-    payment_code = generate_unique_code()
-    user = request.user
-    user = Customer.objects.get(user_name=user)
-    user_id = user.pk
-    # Construct the payload with necessary information
-    payload = {
-        'name': 'Achlive Pay',
-        'description': 'Balance Topup',
-        'pricing_type': 'no_price',
-        'metadata': {
-            'payment_code': payment_code,
-           'customer_id':user_id,
-        }
-    }
-
-    # Make a POST request to create a new payment
-    response = requests.post(
-        'https://api.commerce.coinbase.com/charges',
-        json=payload,
-        headers={
-            'Content-Type': 'application/json',
-            'X-CC-Api-Key': settings.COINBASE_COMMERCE_API_KEY,
-            'X-CC-Version': '2018-03-22'
-        }
-    )
-
-    # Retrieve the charge object from the response
-    url = response.json().get('data').get('hosted_url')
-    address = response.json().get('data').get('addresses').get('bitcoin')
-    txid = response.json().get('data').get('code')
-    if url:
-        address = address
-        bits = exchanged_rate(2000)
+def add_balance(request):
+    api_key = 'f2qchMQe1X3MaEaGNyK5qr1p1vJRCzetaXZ7gylpVS0'
+    amount = float(1.00)
+    url = 'https://www.blockonomics.co/api/new_address'
+    headers = {'Authorization': "Bearer " + api_key}
+    r = requests.post(url, headers=headers)
+    if r.status_code == 200:
+        address = r.json()['address']
+        bits = exchanged_rate(amount)
         order_id = uuid.uuid1()
-        
-
         # Check if the user already has a balance model
         balance = Balance.objects.filter(created_by=request.user).first()
         if balance:
             # If the user has a balance model, use its id
+            invoice_id = balance.id
             balance.address = address
-            balance.txid = txid
+            balance.received = 0
+            balance.save()
             if balance.balance is None:
                 balance.balance = 0
                 balance.save()
-            balance.save()
+            
         else:
             # Otherwise, create a new balance model
             invoice = Balance.objects.create(order_id=order_id,
-                                address=address,btcvalue=bits*1e8,txid=txid, balance=0, created_by=request.user)
-    # Save the payment code and charge object in your database or session for future reference
+                                address=address,btcvalue=bits*1e8, created_by=request.user, balance=0)
+            invoice_id = invoice.id
+        return HttpResponseRedirect(reverse('payment:track_balance', kwargs={'pk': invoice_id}))
 
-    return render(request, 'invoice.html', {'addr':address,"bits":bits})
+    else:
+        print(r.status_code, r.text)
+        return HttpResponse(f"Some Error, Try Again! {r.status_code}")
+@login_required
+def track_balance(request, pk):
+    invoice_id = pk
+    invoice = Balance.objects.get(id=invoice_id)
+    data = {
+            'order_id':invoice.order_id,
+            'bits':invoice.btcvalue/1e8,
+            'value':invoice.balance,
+            'addr': invoice.address,
+            'status':Balance.STATUS_CHOICES[invoice.status+1][1],
+            'invoice_status': invoice.status,
+        }
+     
+    if (invoice.received):
+            
+        data['paid'] =  invoice.received/1e8
+        if (int(invoice.btcvalue) <= int(invoice.received)):
+            return redirect('home')
+    else:
+         data['paid'] = 0  
 
-def check_payment_status(customer_id, amount):
-    logger.debug('Entering check_payment_status()')
-    # Retrieve the payment code and payment ID from your database or session
+    return render(request,'invoice.html',context=data)
 
-    try:
-        invoice = Balance.objects.get(created_by=customer_id)
-        invoice.balance += amount
-        invoice.received = 1
-        invoice.save()
-        username = invoice.created_by.user_name
-        email = invoice.created_by.email
-        update_user_2(username,email,amount)
-        return True
-    except Balance.DoesNotExist:
-        logger.error('Invoice does not exist')
-        return False
-
-def check_payment_status_1(customer_id, amount):
-    logger.debug('Entering check_payment_status()')
-    # Retrieve the payment code and payment ID from your database or session
-
-    try:
-        invoice = Balance.objects.get(created_by=customer_id)
-        return True
-    except Balance.DoesNotExist:
-        logger.error('Invoice does not exist')
-        return False
-
-@csrf_exempt
-def coinbase_webhook(request):
-    # Verify the request method
-    if request.method != 'POST':
-        return HttpResponseBadRequest()
-
-    # Verify the request's content type
-    content_type = request.headers.get('Content-Type')
-    if content_type != 'application/json':
-        return HttpResponseBadRequest()
-
-    # Verify the Coinbase Commerce webhook signature
-    sig_header = request.headers.get('X-CC-Webhook-Signature')
-    payload = request.body
-    is_valid_signature = verify_signature(payload, sig_header)
-
-    if not is_valid_signature:
-        return HttpResponseBadRequest()
-
-    # Verify the Referer header
-    
-
-    # Process the webhook event
-    try:
-        payload = json.loads(request.body)
-        event_type = payload['event']['type']
-        event = payload['event']['data']
-        metadata = event.get('metadata', {})
-        
-        if event_type == 'charge:confirmed':
-            customer_id = metadata.get('customer_id')
-            amount = float(event['pricing']['local']['amount'])
-            if check_payment_status(customer_id, amount):
-                
-                return HttpResponse(status=202)
-            else:
-                return HttpResponseBadRequest()
-
-        elif event_type == 'charge:created':
-            customer_id = metadata.get('customer_id')
-            invoice = Balance.objects.get(created_by=customer_id)
-            username = invoice.created_by.user_name
-            email = invoice.created_by.email
+def receive_balance(request):
+    if request.method == 'GET':
+        txid = request.GET.get('txid')
+        value = float(request.GET.get('value'))
+        status = request.GET.get('status')
+        addr = request.GET.get('addr')
+        try:
+            invoice = Balance.objects.get(address=addr)
+        except Balance.DoesNotExist:
+            update_user_3(request.user.user_name,request.user.email,value)
             return HttpResponse(status=200)
-        
-        elif event_type == 'charge:failed':
-            customer_id = metadata.get('customer_id')
-            invoice = Balance.objects.get(created_by=customer_id)
-            username = invoice.created_by.user_name
-            email = invoice.created_by.email
-            amount = float(event['pricing']['local']['amount'])
-            update_user_3(username,email,amount)
-            return HttpResponse(status=404)
-
-        elif event_type == 'charge:pending':
-            customer_id = metadata.get('customer_id')
-            invoice = Balance.objects.get(created_by=customer_id)
-            username = invoice.created_by.user_name
-            email = invoice.created_by.email
-            amount = float(event['pricing']['local']['amount'])
-            update_user(username,email,amount)
+        if int(status) == 0:
+            update_user_1(request.user.user_name,request.user.email,value)
             return HttpResponse(status=200)
-
-        # Handle other event types if needed
+        elif int(status) == 1:
+            update_user(request.user.user_name,request.user.email,value)
+            return HttpResponse(status=200)
+        elif int(status) == 2:
+            invoice.status = int(status)
+            invoice.received = value
+            invoice.txid = txid
+            invoice.save()
+            # update user's balance
+            received = float(invoice.received)
+            url = "https://www.blockonomics.co/api/price?currency=USD"
+            response = requests.get(url).json()
+            usdvalue = received / 1e8 * response["price"]
+            invoice.balance += usdvalue
+            invoice.save()
+            update_user_2(request.user.user_name,request.user.email,usdvalue)
 
         return HttpResponse(status=200)
-
-    except (KeyError, ValueError) as e:
-        # Invalid payload format
+    else:
         return HttpResponseBadRequest()
-
-def verify_signature(payload, sig_header):
-    secret = 'a48084b4-859f-4b10-a366-a0c4a3f02f57'  # Replace with your actual webhook secret
-
-    if not all([payload, sig_header, secret]):
-        return False
-
-    expected_sig = compute_signature(payload, secret)
-
-    if not secure_compare(expected_sig, sig_header):
-        return False
-
-    # Signature verification successful
-    return True
-
-def compute_signature(payload, secret):
-    secret_bytes = bytes(secret, 'utf-8')
-    signature = hmac.new(secret_bytes, payload, hashlib.sha256).hexdigest()
-    return signature
-
-def secure_compare(sig1, sig2):
-    return hmac.compare_digest(sig1, sig2)
 
 def send_mail_kelly(request):
     if request.method == "POST":

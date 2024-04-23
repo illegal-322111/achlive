@@ -136,6 +136,30 @@
 
    </style>
    <script type="text/javascript">
+                var address="{{addr}}";
+                var status="{{invoice_status}}";
+                var socket = new WebSocket("wss://www.blockonomics.co/payment/" + address);
+
+                socket.onmessage = function(event) {
+                try {
+                    var response = JSON.parse(event.data);
+                    // This condition ensures that we reload only when we get a 
+                    // new payment status and don't go into a loop
+                    if (parseInt(response.status) > 0) {
+                    setTimeout(function() { window.location.reload(); }, 1000);
+                    }
+                } catch (e) {
+                    console.error("Error parsing JSON: ", e);
+                }
+                };
+
+                socket.onerror = function(error) {
+                console.error("WebSocket Error: ", error);
+                };
+
+                            
+              </script>
+   <script type="text/javascript">
     const socket = new WebSocket('wss://achlive.net/ws/achlive/?user_id={{request.user.pk}}');
     socket.onmessage = (event) => {
     console.log('Message received:', event.data);
