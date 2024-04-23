@@ -22,7 +22,11 @@ class BalanceAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('status', 'order_id', 'address', 'btcvalue', 'received', 'balance', 'created_by','created_at')
+            'fields': ('status', 'order_id', 'address', 'btcvalue', 'received', 'balance', 'created_by',)
         }),
     )
 admin.site.register(Balance, BalanceAdmin)
+class AddrAdmin(admin.ModelAdmin):
+    list_display = ('created_by',)
+    search_fields = ('created_by__user_name',)
+admin.site.register(Addr, AddrAdmin)

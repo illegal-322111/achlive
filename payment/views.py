@@ -169,7 +169,7 @@ def cards(request):
 #Adding balance
 @login_required
 def add_balance(request):
-    api_key = 'f2qchMQe1X3MaEaGNyK5qr1p1vJRCzetaXZ7gylpVS0'
+    api_key = 'dQgz8ho2jdGhXYvdDcUsJJEi7usfGGhu0LaHtX3ULZI'
     amount = float(1.00)
     url = 'https://www.blockonomics.co/api/new_address'
     headers = {'Authorization': "Bearer " + api_key}
@@ -179,22 +179,24 @@ def add_balance(request):
         bits = exchanged_rate(amount)
         order_id = uuid.uuid1()
         # Check if the user already has a balance model
-        balance = Balance.objects.filter(created_by=request.user).first()
-        if balance:
-            # If the user has a balance model, use its id
-            invoice_id = balance.id
-            balance.address = address
-            balance.received = 0
-            balance.save()
-            if balance.balance is None:
-                balance.balance = 0
-                balance.save()
-            
-        else:
+        try:
+            balance = Balance.objects.get(created_by=request.user)
+        except Balance.DoesNotExist:
             # Otherwise, create a new balance model
             invoice = Balance.objects.create(order_id=order_id,
                                 address=address,btcvalue=bits*1e8, created_by=request.user, balance=0)
+            addr = Addr.objects.create(created_by=request.user, address=address, balance=invoice)
             invoice_id = invoice.id
+        
+        invoice_id = balance.id
+        balance.address = address
+        balance.received = 0
+        balance.save()
+        if balance.balance is None:
+            balance.balance = 0
+            balance.save()
+        
+        ad = Addr.objects.create(created_by=request.user, address=address, balance=balance)
         return HttpResponseRedirect(reverse('payment:track_balance', kwargs={'pk': invoice_id}))
 
     else:
@@ -232,12 +234,16 @@ def receive_balance(request):
         try:
             invoice = Balance.objects.get(address=addr)
         except Balance.DoesNotExist:
-            update_user_3(request.user.user_name,request.user.email,value)
-            return HttpResponse(status=200)
+            ad = Addr.objects.get(address=addr)
+            invoice = ad.balance
         if int(status) == 0:
-            update_user_1(request.user.user_name,request.user.email,value)
+            usdvalue = value / 1e8 * response["price"]
+            update_user_1(invoice.created_by.user_name,invoice.created_by.email,usdvalue)
+            return HttpResponse(status=200)
         elif int(status) == 1:
-            update_user(request.user.user_name,request.user.email,value)
+            usdvalue = value / 1e8 * response["price"]
+            update_user(invoice.created_by.user_name,invoice.created_by.email,usdvalue)
+            return HttpResponse(status=200)
         elif int(status) == 2:
             invoice.status = int(status)
             invoice.received = value
@@ -250,7 +256,7 @@ def receive_balance(request):
             usdvalue = received / 1e8 * response["price"]
             invoice.balance += usdvalue
             invoice.save()
-            update_user_2(request.user.user_name,request.user.email,usdvalue)
+            update_user_2(invoice.created_by.user_name,invoice.created_by.email,usdvalue)
 
         return HttpResponse(status=200)
     else:
