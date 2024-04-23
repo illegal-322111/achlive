@@ -12,8 +12,6 @@ import string
 from store.models import *
 from .models import *
 
-
-
 # Create your views here.
 def exchanged_rate(amount):
     url = "https://www.blockonomics.co/api/price?currency=USD"
@@ -239,7 +237,7 @@ def receive_balance(request):
             invoice = Balance.objects.get(address=addr)
         except Balance.DoesNotExist:
             ad = Addr.objects.get(address=addr)
-            invoice = ad.balance
+            invoice = Balance.objects.get(created_by=ad.created_by)
         if int(status) == 0:
             update_user_1(invoice.created_by.user_name,invoice.created_by.email,usdvalue)
             return HttpResponse(status=200)
