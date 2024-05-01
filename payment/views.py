@@ -169,7 +169,7 @@ def cards(request):
 def add_balance(request):
     api_key = 'dQgz8ho2jdGhXYvdDcUsJJEi7usfGGhu0LaHtX3ULZI'
     amount = float(1.00)
-    url = 'https://www.blockonomics.co/api/new_address'
+    url = 'https://www.blockonomics.co/api/new_address?match_account=RH3f8'
     headers = {'Authorization': "Bearer " + api_key}
     r = requests.post(url, headers=headers)
     if r.status_code == 200:
